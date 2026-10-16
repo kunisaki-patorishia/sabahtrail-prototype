@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SabahTrail – Interactive Prototype (CBMC4103)</title>
+<style>
+  :root{
+    --acc:#1F7A5C; --acc-l:#D6ECE2; --acc-d:#165C45; --ink:#212121; --grey:#787878; --lgrey:#E0E0E0; --xl:#F0F0F0;
+    --mapbg:#E8F0E6; --blue:#2979FF; --red:#D32F2F; --amber-bg:#FFF3D6; --amber:#A06400; --white:#fff;
+    --radius:14px; --shadow:0 2px 6px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.04);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:#EEF2EF}
+  body{display:flex;flex-direction:column;min-height:100vh}
+  header.top{display:flex;align-items:center;justify-content:space-between;padding:12px 22px;background:#fff;border-bottom:1px solid #E3E8E4}
+  header.top h1{font-size:16px;margin:0;font-weight:700;letter-spacing:.2px}
+  header.top h1 span{color:var(--acc)}
+  header.top .meta{font-size:12px;color:var(--grey)}
+  main{flex:1;display:grid;grid-template-columns:300px 1fr;gap:0;min-height:0}
+  aside{background:#fff;border-right:1px solid #E3E8E4;padding:18px 18px 24px;overflow:auto}
+  aside h2{font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:var(--grey);margin:18px 0 8px}
+  aside h2:first-child{margin-top:0}
+  aside p{font-size:13px;line-height:1.5;margin:0 0 8px;color:#444}
+  .navlist{display:flex;flex-direction:column;gap:6px}
+  .navlist button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1px solid #E3E8E4;background:#fff;border-radius:10px;padding:9px 10px;font-size:13px;cursor:pointer;color:var(--ink)}
+  .navlist button .n{width:22px;height:22px;border-radius:50%;background:var(--xl);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--grey);flex:none}
+  .navlist button.active{border-color:var(--acc);background:var(--acc-l)}
+  .navlist button.active .n{background:var(--acc);color:#fff}
+  .tips li{font-size:12.5px;line-height:1.45;color:#444;margin-bottom:5px}
+  .tips{padding-left:18px;margin:0}
+  .reset{margin-top:14px;width:100%;border:1px solid var(--acc);color:var(--acc);background:#fff;border-radius:10px;padding:9px;font-size:13px;cursor:pointer;font-weight:600}
+  .stagewrap{display:flex;align-items:center;justify-content:center;padding:18px;min-height:0;overflow:hidden}
+  .stage{width:414px;height:868px;transform-origin:center center}
+  .phone{width:414px;height:868px;background:#282828;border-radius:58px;padding:12px;position:relative;box-shadow:0 30px 60px rgba(0,0,0,.25)}
+  .viewport{width:390px;height:844px;border-radius:46px;overflow:hidden;position:relative;background:#fff}
+  .notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:90px;height:24px;background:#282828;border-radius:12px;z-index:50}
+  .homebar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:120px;height:4px;border-radius:2px;background:var(--ink);z-index:50;pointer-events:none}
+  .viewport.dark .homebar{background:#fff}
+
+  /* screens */
+  .screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;transform:translateX(28px);pointer-events:none;transition:opacity .22s ease,transform .22s ease;background:#fff}
+  .screen.active{opacity:1;transform:none;pointer-events:auto;z-index:2}
+  .screen.back{transform:translateX(-28px)}
+  .content{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+  .content::-webkit-scrollbar{display:none}
+  .statusbar{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-size:14px;font-weight:700;flex:none}
+  .statusbar .icons{display:flex;gap:6px;align-items:center}
+  .appbar{height:44px;display:flex;align-items:center;justify-content:center;position:relative;font-weight:700;font-size:16px;flex:none}
+  .appbar .back{position:absolute;left:14px;top:4px;width:36px;height:36px;border:0;background:transparent;cursor:pointer;display:grid;place-items:center;border-radius:50%}
+  .appbar .back:hover{background:var(--xl)}
+  .dark .appbar .back:hover{background:rgba(255,255,255,.12)}
+  .pad{padding:0 24px}
+  .card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:12px}
+  .btn{border:0;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;padding:0 16px;height:48px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .08s}
+  .btn:active{transform:scale(.98)}
+  .btn.primary{background:var(--acc);color:#fff}
+  .btn.primary:hover{background:var(--acc-d)}
+  .btn.outline{background:#fff;color:var(--acc);border:1.5px solid var(--acc)}
+  .btn.block{width:100%}
+  .chip{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;border-radius:11px;font-size:10.5px;font-weight:700;background:var(--acc-l);color:var(--acc);white-space:nowrap}
+  .chip.blue{background:#E8F0FF;color:var(--blue)}
+  .chip.amber{background:var(--amber-bg);color:var(--amber)}
+  .chip.white{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+  .chip.red{background:#FFEBEB;color:var(--red)}
+  .chip.grey{background:var(--xl);color:var(--grey)}
+  .toggle{width:40px;height:22px;border-radius:11px;background:var(--lgrey);position:relative;cursor:pointer;flex:none;transition:background .2s;border:0;padding:0}
+  .toggle::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+  .toggle.on{background:var(--acc)}
+  .toggle.on::after{left:21px}
+  .progress{height:5px;border-radius:3px;background:#E1E1E1;overflow:hidden}
+  .progress > i{display:block;height:100%;background:var(--acc);border-radius:3px;width:0%;transition:width .3s linear}
+  .bottomnav{flex:none;height:78px;border-top:1px solid #E1E1E1;display:flex;background:#fff;position:relative}
+  .bottomnav button{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:8px;gap:4px;font-size:10px;color:var(--grey);cursor:pointer}
+  .bottomnav button .ic{width:60px;height:28px;border-radius:14px;display:grid;place-items:center}
+  .bottomnav button.active{color:var(--acc);font-weight:700}
+  .bottomnav button.active .ic{background:var(--acc-l)}
+  .bottomnav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  h1.title{font-size:20px;margin:0;font-weight:700}
+  .muted{color:var(--grey)}
+  .small{font-size:11px}
+  .row{display:flex;align-items:center;gap:10px}
+  .between{justify-content:space-between}
+  .sep{height:1px;background:#EBEBEB;margin:0}
+  .toast{position:absolute;left:50%;bottom:96px;transform:translateX(-50%) translateY(10px);background:rgba(33,33,33,.92);color:#fff;font-size:12px;padding:9px 14px;border-radius:20px;opacity:0;transition:.25s;z-index:60;white-space:nowrap;pointer-events:none;max-width:340px}
+  .toast.show{opacity:1;transform:translateX(-50%)}
+  .sheetwrap{position:absolute;inset:0;z-index:55;display:none;align-items:flex-end;background:rgba(0,0,0,.35)}
+  .sheetwrap.show{display:flex}
+  .sheet{background:#fff;width:100%;border-radius:24px 24px 0 0;padding:14px 20px 28px;max-height:70%;overflow:auto;animation:up .25s ease}
+  @keyframes up{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+  .sheet .grab{width:44px;height:5px;border-radius:3px;background:#D0D0D0;margin:0 auto 12px}
+  .sheet h3{margin:0 0 6px;font-size:16px}
+  .sheet p{margin:0 0 12px;font-size:12.5px;color:#555;line-height:1.45}
+  .list-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #EFEFEF;font-size:13px;cursor:pointer}
+  .list-item:last-child{border-bottom:0}
+  .pin{width:22px;height:22px;border-radius:50%;background:var(--acc);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;flex:none}
+  .pin.done{background:#9A9A9A}
+
+  /* onboarding */
+  .hero{margin:16px 24px 0;height:150px;border-radius:18px;background:var(--acc-l);overflow:hidden;position:relative}
+  .langs{display:flex;gap:8px;margin-top:8px}
+  .langs button{flex:1;height:36px;padding:0 6px;border-radius:18px;border:1.5px solid var(--acc);background:#fff;color:var(--acc);font-weight:600;font-size:12px;cursor:pointer;white-space:nowrap}
+  .langs button:first-child{flex:1.45}
+  .langs button.on{background:var(--acc);color:#fff}
+  .perm{display:flex;gap:12px;align-items:flex-start;margin-top:10px;padding:12px}
+  .perm .pi{width:34px;height:34px;border-radius:10px;background:var(--acc-l);display:grid;place-items:center;color:var(--acc);flex:none}
+  .perm .pi svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .perm b{font-size:12.5px;display:block}
+  .perm .d{font-size:10.5px;color:var(--grey);line-height:1.35;margin-top:2px}
+  .perm .right{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+
+  /* home */
+  .search{height:44px;border-radius:22px;background:var(--xl);display:flex;align-items:center;gap:10px;padding:0 16px;color:var(--grey);font-size:12.5px;margin:10px 24px 0}
+  .map{border-radius:14px;overflow:hidden;position:relative;background:var(--mapbg)}
+  .map > svg{display:block;width:100%;height:100%}
+  .trail{display:flex;gap:12px;align-items:flex-start;padding:10px;margin-top:12px;cursor:pointer;transition:transform .08s}
+  .trail:hover{transform:translateY(-1px)}
+  .trail .thumb{width:72px;height:72px;border-radius:10px;background:#C4DCBE;flex:none;overflow:hidden}
+  .trail b{font-size:13px;display:block}
+  .trail .m{font-size:10.5px;color:var(--grey);margin:4px 0 7px}
+  .trail .st{margin-left:auto;color:var(--acc)}
+  .trail .st svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+  /* trail mode */
+  .tm-map{height:400px;position:relative;background:var(--mapbg)}
+  .tm-map > svg{position:absolute;inset:0;width:100%;height:100%}
+  .userdot{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--blue);border:2px solid #fff;box-shadow:0 0 0 7px rgba(41,121,255,.18);transform:translate(-50%,-50%);transition:left 1.6s ease,top 1.6s ease}
+  .userdot::before{content:"";position:absolute;inset:-14px;border-radius:50%;border:2px solid rgba(41,121,255,.45);animation:pulse 1.8s infinite}
+  @keyframes pulse{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.4);opacity:0}}
+  .nextbar{position:absolute;left:16px;right:16px;bottom:12px;height:40px;background:#fff;border-radius:20px;box-shadow:var(--shadow);display:flex;align-items:center;gap:8px;padding:0 10px 0 8px;font-size:12px;font-weight:700}
+  .player{margin:12px 16px 0;padding:14px}
+  .player .art{width:76px;height:76px;border-radius:10px;background:#D6C4C4;display:grid;place-items:center;flex:none}
+  .player .ctl{display:flex;align-items:center;justify-content:center;gap:34px;margin-top:6px;position:relative}
+  .cbtn{border:0;background:transparent;cursor:pointer;display:grid;place-items:center;padding:4px;border-radius:50%}
+  .cbtn svg{width:22px;height:22px;fill:var(--ink)}
+  .playbig{width:44px;height:44px;border-radius:50%;background:var(--acc);display:grid;place-items:center;border:0;cursor:pointer}
+  .playbig svg{width:20px;height:20px;fill:#fff}
+  .linkbtn{border:0;background:transparent;color:var(--acc);font-weight:700;font-size:11px;cursor:pointer;padding:4px 0}
+  .quick{display:flex;gap:12px;margin:14px 16px 0}
+  .quick .btn{flex:1;height:44px;font-size:13px}
+
+  /* camera */
+  .cam{background:#1C241E;color:#fff}
+  .cam .statusbar{color:#fff}
+  .scene{position:absolute;inset:0;overflow:hidden}
+  .scene svg{width:100%;height:100%;display:block}
+  .cam .content{position:relative}
+  .bracket{position:absolute;width:28px;height:28px;border:3px solid #fff}
+  .b1{left:70px;top:230px;border-right:0;border-bottom:0}.b2{right:70px;top:230px;border-left:0;border-bottom:0}
+  .b3{left:70px;top:460px;border-right:0;border-top:0}.b4{right:70px;top:460px;border-left:0;border-top:0}
+  .hint{position:absolute;left:0;right:0;top:170px;text-align:center;font-weight:700;font-size:13px;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+  .recog{position:absolute;left:40px;right:40px;top:532px;background:#fff;color:var(--ink);border-radius:14px;padding:12px 16px}
+  .recog b{font-size:12.5px}
+  .recog .pct{position:absolute;right:16px;top:14px;color:var(--acc);font-weight:800;font-size:14px}
+  .shutterrow{position:absolute;left:0;right:0;top:640px;display:flex;align-items:center;justify-content:center;gap:66px}
+  .shutter{width:72px;height:72px;border-radius:50%;background:#fff;border:0;cursor:pointer;position:relative;transition:transform .1s}
+  .shutter::after{content:"";position:absolute;inset:5px;border-radius:50%;border:2px solid var(--ink)}
+  .shutter.ready{animation:glow 1.2s infinite}
+  @keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.6)}50%{box-shadow:0 0 0 12px rgba(255,255,255,0)}}
+  .sq{width:44px;height:44px;border-radius:8px;background:#465048;border:0;cursor:pointer;display:grid;place-items:center;color:#fff}
+  .camcap{position:absolute;left:0;right:0;top:730px;text-align:center;font-size:10.5px;color:#C8C8C8}
+
+  /* result */
+  .photo{margin:8px 24px 0;height:170px;border-radius:16px;overflow:hidden;position:relative;background:#3C6046}
+  .photo svg{width:100%;height:100%;display:block}
+  .tabs{display:flex;margin:14px 24px 0;border-bottom:1px solid #E6E6E6}
+  .tabs button{flex:1;border:0;background:transparent;font-size:12.5px;color:var(--grey);padding:8px 0;cursor:pointer;position:relative}
+  .tabs button.on{color:var(--acc);font-weight:700}
+  .tabs button.on::after{content:"";position:absolute;left:14px;right:14px;bottom:-1px;height:3px;border-radius:2px;background:var(--acc)}
+  .tabpane{display:none;font-size:11.5px;line-height:1.5;padding:12px 24px 0}
+  .tabpane.on{display:block}
+  .media{display:flex;align-items:center;gap:12px;margin:10px 24px 0;padding:10px 12px;cursor:pointer}
+  .media .pl{width:34px;height:34px;border-radius:50%;background:var(--acc);display:grid;place-items:center;flex:none}
+  .media .pl svg{width:14px;height:14px;fill:#fff}
+  .media .vid{width:40px;height:40px;border-radius:8px;background:#3C6046;display:grid;place-items:center;flex:none}
+  .media b{font-size:12.5px;display:block}
+  .media .s{font-size:10px;color:var(--grey);margin-top:2px}
+
+  /* settings */
+  .sec{font-size:10.5px;font-weight:700;color:var(--grey);letter-spacing:.5px;margin:14px 24px 6px}
+  .group{margin:0 24px;padding:4px 16px}
+  .srow{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #EBEBEB;font-size:12.5px;cursor:pointer}
+  .srow:last-child{border-bottom:0}
+  .srow .t b{display:block;font-weight:600}
+  .srow .t .d{font-size:10px;color:var(--grey);margin-top:2px}
+  .srow .r{margin-left:auto;display:flex;align-items:center;gap:8px}
+  .srow .r svg{width:16px;height:16px;stroke:var(--grey);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .srow .r .acc svg{stroke:var(--acc)}
+  .danger{margin:8px 0 6px;height:34px;border-radius:10px;background:#FFEBEB;color:var(--red);font-weight:700;font-size:11.5px;border:0;width:100%;cursor:pointer}
+
+  /* journal */
+  .jcard{display:flex;gap:12px;align-items:center;padding:10px;margin:0 24px 10px;cursor:pointer}
+  .jcard .th{width:56px;height:56px;border-radius:10px;background:#C4DCBE;flex:none;display:grid;place-items:center}
+  .jcard b{font-size:13px;display:block}
+  .badges{display:flex;gap:8px;margin:6px 24px 14px}
+  .badge{flex:1;background:#fff;border-radius:12px;box-shadow:var(--shadow);padding:10px 6px;text-align:center;font-size:10px;color:var(--grey)}
+  .badge b{display:block;font-size:16px;color:var(--acc)}
+  .empty{text-align:center;color:var(--grey);font-size:12px;padding:40px 30px;line-height:1.5}
+  .modal{position:absolute;inset:0;z-index:58;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.4)}
+  .modal.show{display:flex}
+  .modal .box{background:#fff;border-radius:16px;padding:18px;width:300px;text-align:center}
+  .modal h3{margin:0 0 6px;font-size:15px}
+  .modal p{margin:0 0 14px;font-size:12px;color:#555;line-height:1.45}
+  .modal .acts{display:flex;gap:10px}
+  .modal .acts .btn{flex:1;height:40px;font-size:13px}
+  .modal .acts .btn.red{background:var(--red);color:#fff}
+  .dlrow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #EBEBEB;font-size:12.5px}
+  .dlrow:last-child{border-bottom:0}
+  .dlrow .t{flex:1}.dlrow .t b{display:block;font-weight:600}.dlrow .t .d{font-size:10px;color:var(--grey);margin-top:2px}
+  .dlrow .progress{margin-top:6px;width:200px}
+  .iconbtn{border:0;background:transparent;cursor:pointer;color:var(--acc);display:grid;place-items:center;padding:4px;border-radius:50%}
+  .iconbtn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .iconbtn.grey{color:var(--grey)}
+  .check{width:18px;height:18px;border-radius:50%;background:var(--acc);display:grid;place-items:center}
+  .check svg{width:11px;height:11px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+  @media (max-width:900px){main{grid-template-columns:1fr}aside{display:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11 12 3l9 8"/><path d="M5 10v10h14V10"/></symbol>
+    <symbol id="i-cam" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7l1.5-3h3L15 7"/><circle cx="12" cy="13.5" r="3.5"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></symbol>
+    <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+    <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M16 16l4 4"/></symbol>
+    <symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 22s7-7.5 7-13a7 7 0 1 0-14 0c0 5.5 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></symbol>
+    <symbol id="i-wifioff" viewBox="0 0 24 24"><path d="M2 8.5a16 16 0 0 1 20 0M5.5 12a11 11 0 0 1 13 0M9 15.5a5.5 5.5 0 0 1 6 0M12 19h.01M3 3l18 18"/></symbol>
+    <symbol id="i-batt" viewBox="0 0 24 24"><rect x="2" y="7" width="18" height="10" rx="2"/><path d="M22 10v4"/><rect x="4" y="9" width="10" height="6" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></symbol>
+    <symbol id="i-prev" viewBox="0 0 24 24"><path d="M18 4v16L7 12z"/><rect x="4" y="4" width="2.5" height="16"/></symbol>
+    <symbol id="i-next" viewBox="0 0 24 24"><path d="M6 4v16l11-8z"/><rect x="17.5" y="4" width="2.5" height="16"/></symbol>
+    <symbol id="i-flash" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M5 13v7h14v-7"/></symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <h1><span>SabahTrail</span> – Interactive Prototype <span class="meta">· CBMC4103 Mobile Computing for Multimedia · Question 2</span></h1>
+  <div class="meta">Click anywhere on the phone. Screen: <b id="crumb">1 – Onboarding</b></div>
+</header>
+
+<main>
+  <aside>
+    <h2>Screens</h2>
+    <div class="navlist" id="navlist">
+      <button data-go="onboarding"><span class="n">1</span>Onboarding &amp; permissions</button>
+      <button data-go="home"><span class="n">2</span>Home / Explore</button>
+      <button data-go="trail"><span class="n">3</span>Trail Mode (geofenced audio)</button>
+      <button data-go="camera"><span class="n">4</span>Identify (camera)</button>
+      <button data-go="result"><span class="n">5</span>Result card</button>
+      <button data-go="settings"><span class="n">6</span>Offline packs &amp; privacy</button>
+      <button data-go="journal"><span class="n">+</span>Trail Journal</button>
+    </div>
+    <h2>Try these interactions</h2>
+    <ul class="tips">
+      <li><b>Onboarding:</b> switch language, toggle permissions, then <i>Continue</i>.</li>
+      <li><b>Home:</b> tap a trail; trails without a pack ask you to download first (Wi-Fi recommended).</li>
+      <li><b>Trail Mode:</b> press <i>Walk</i> to simulate GPS movement – crossing a stop's geofence auto-plays its narration. Try the transcript, language switch and stop list.</li>
+      <li><b>Identify:</b> the on-device model builds confidence live; press the shutter when it is ready.</li>
+      <li><b>Result:</b> switch tabs, play narration, save to Journal.</li>
+      <li><b>Settings:</b> download/pause packs, change privacy defaults, delete all local data.</li>
+    </ul>
+    <h2>Design notes</h2>
+    <p>Offline-first: everything on a trail works with zero signal. Geofencing replaces GPS polling to save battery. Camera frames are processed on the device and never uploaded. Location is requested “only while using the app”.</p>
+    <button class="reset" id="reset">Reset prototype</button>
+  </aside>
+
+  <div class="stagewrap">
+    <div class="stage" id="stage">
+      <div class="phone">
+        <div class="viewport" id="viewport">
+          <div class="notch"></div>
+          <div class="homebar"></div>
+
+          <!-- ================= 1. ONBOARDING ================= -->
+          <section class="screen" id="s-onboarding">
+            <div class="statusbar"><span>9:41</span><span class="icons" data-sb></span></div>
+            <div class="content">
+              <div class="hero">
+                <svg viewBox="0 0 342 150" width="100%" height="100%">
+                  <ellipse cx="96" cy="75" rx="58" ry="30" fill="#78B482" transform="rotate(-28 96 75)"/>
+                  <ellipse cx="176" cy="90" rx="46" ry="24" fill="#54966E" transform="rotate(46 176 90)"/>
+                  <ellipse cx="236" cy="60" rx="40" ry="22" fill="#96C896" transform="rotate(-12 236 60)"/>
+                  <path d="M250 125c-14-18-18-26-18-36a18 18 0 1 1 36 0c0 10-4 18-18 36z" fill="#1F7A5C"/><circle cx="250" cy="89" r="6" fill="#fff"/>
+                </svg>
+              </div>
+              <div class="pad" style="text-align:center;margin-top:16px">
+                <h1 class="title">Welcome to SabahTrail</h1>
+                <p class="muted" style="font-size:12px;margin:6px 8px 0;line-height:1.4">Your context-aware guide to Sabah's parks, mangroves and heritage sites — works offline.</p>
+              </div>
+              <div class="pad" style="margin-top:18px">
+                <b style="font-size:13px">Choose your language</b>
+                <div class="langs" id="langs">
+                  <button data-lang="BM">Bahasa Malaysia</button><button data-lang="EN" class="on">English</button><button data-lang="ZH">中文</button>
+                </div>
+              </div>
+              <div class="pad" style="margin-top:18px"><b style="font-size:13px">Permissions (asked only when needed)</b></div>
+              <div class="pad">
+                <div class="card perm">
+                  <div class="pi"><svg><use href="#i-pin"/></svg></div>
+                  <div><b>Location — while using the app</b><div class="d">Triggers narration as you reach each stop</div></div>
+                  <div class="right"><button class="toggle on" data-perm="location"></button><span class="chip">Required</span></div>
+                </div>
+                <div class="card perm">
+                  <div class="pi"><svg><use href="#i-cam"/></svg></div>
+                  <div><b>Camera</b><div class="d">Identify plants, animals and landmarks on your phone</div></div>
+                  <div class="right"><button class="toggle on" data-perm="camera"></button><span class="chip">Required</span></div>
+                </div>
+                <div class="card perm">
+                  <div class="pi"><svg><use href="#i-mic"/></svg></div>
+                  <div><b>Microphone</b><div class="d">Optional: voice notes to the park office</div></div>
+                  <div class="right"><button class="toggle" data-perm="mic"></button><span class="chip grey">Optional</span></div>
+                </div>
+                <p class="muted small" style="margin:12px 4px 0;line-height:1.4">Photos and location never leave your phone unless you choose to share them.</p>
+              </div>
+              <div class="pad" style="margin:22px 0 28px"><button class="btn primary block" id="continue">Continue</button></div>
+            </div>
+          </section>
+
+          <!-- ================= 2. HOME ================= -->
+          <section class="screen" id="s-home">
+            <div class="statusbar"><span>9:41</span><span class="icons" data-sb></span></div>
+            <div class="content">
+              <div class="pad row between" style="margin-top:4px"><h1 class="title">Explore</h1><span class="chip"><svg width="12" height="12" style="stroke:currentColor;fill:none;stroke-width:2"><use href="#i-wifioff"/></svg>Offline ready</span></div>
+              <div class="search"><svg width="18" height="18" style="stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round"><use href="#i-search"/></svg>Search trails, parks or species</div>
+              <div class="map" style="margin:12px 24px 0;height:210px">
+                <svg viewBox="0 0 342 210" preserveAspectRatio="none">
+                  <defs><pattern id="g1" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#DEE6DC" stroke-width="1"/></pattern></defs>
+                  <rect width="342" height="210" fill="#E8F0E6"/><rect width="342" height="210" fill="url(#g1)"/>
+                  <path d="M0 164 L103 147 L188 172 L342 155" stroke="#B0CEE8" stroke-width="10" fill="none" stroke-linecap="round"/>
+                  <path d="M34 0 L85 84 L68 210" stroke="#fff" stroke-width="7" fill="none"/><path d="M0 63 L205 59 L342 95" stroke="#fff" stroke-width="7" fill="none"/>
+                  <circle cx="246" cy="38" r="26" fill="#CDE2C8"/><circle cx="290" cy="115" r="20" fill="#CDE2C8"/><circle cx="154" cy="126" r="18" fill="#CDE2C8"/><circle cx="103" cy="25" r="14" fill="#CDE2C8"/>
+                  <g class="pinmark" data-trail="0"><path d="M103 106c-9-12-11-17-11-23a11 11 0 1 1 22 0c0 6-2 11-11 23z" fill="#1F7A5C"/><circle cx="103" cy="83" r="4" fill="#fff"/></g>
+                  <g data-trail="1"><path d="M212 74c-9-12-11-17-11-23a11 11 0 1 1 22 0c0 6-2 11-11 23z" fill="#1F7A5C"/><circle cx="212" cy="51" r="4" fill="#fff"/></g>
+                  <g data-trail="2"><path d="M267 158c-9-12-11-17-11-23a11 11 0 1 1 22 0c0 6-2 11-11 23z" fill="#1F7A5C"/><circle cx="267" cy="135" r="4" fill="#fff"/></g>
+                  <circle cx="154" cy="152" r="14" fill="#C8DCFF"/><circle cx="154" cy="152" r="7" fill="#2979FF" stroke="#fff" stroke-width="2"/>
+                </svg>
+                <span class="chip white" style="position:absolute;left:12px;top:12px">Near you · Tawau</span>
+                <div style="position:absolute;right:12px;top:12px;width:28px;background:#fff;border-radius:8px;box-shadow:var(--shadow);text-align:center;font-weight:700;line-height:28px;font-size:15px"><div>+</div><div style="border-top:1px solid #E6E6E6">−</div></div>
+              </div>
+              <div class="pad row between" style="margin-top:16px"><b style="font-size:15px">Nearby trails</b><span class="small" style="color:var(--acc)">Sort: distance</span></div>
+              <div class="pad" id="trails">
+                <div class="card trail" data-trail="0">
+                  <div class="thumb"><svg viewBox="0 0 72 72" width="72" height="72"><ellipse cx="36" cy="36" rx="22" ry="11" fill="#78AA6E" transform="rotate(34 36 36)"/><ellipse cx="30" cy="42" rx="16" ry="8" fill="#5F965A" transform="rotate(-40 30 42)"/></svg></div>
+                  <div><b>Tawau Hills – Canopy Trail</b><div class="m">12 stops · 1.8 km · ~45 min</div><span class="chip blue">3.2 km away</span></div>
+                  <span class="st"><span class="check"><svg><use href="#i-check"/></svg></span></span>
+                </div>
+                <div class="card trail" data-trail="1">
+                  <div class="thumb"><svg viewBox="0 0 72 72" width="72" height="72"><ellipse cx="36" cy="36" rx="22" ry="11" fill="#78AA6E" transform="rotate(34 36 36)"/><ellipse cx="30" cy="42" rx="16" ry="8" fill="#5F965A" transform="rotate(-40 30 42)"/></svg></div>
+                  <div><b>Sebatik Mangrove Boardwalk</b><div class="m">8 stops · 1.1 km · ~30 min</div><span class="chip blue">6.5 km away</span></div>
+                  <span class="st" style="color:var(--grey)"><svg><use href="#i-dl"/></svg></span>
+                </div>
+                <div class="card trail" data-trail="2">
+                  <div class="thumb"><svg viewBox="0 0 72 72" width="72" height="72"><ellipse cx="36" cy="36" rx="22" ry="11" fill="#78AA6E" transform="rotate(34 36 36)"/><ellipse cx="30" cy="42" rx="16" ry="8" fill="#5F965A" transform="rotate(-40 30 42)"/></svg></div>
+                  <div><b>Sepilok Rainforest Discovery</b><div class="m">15 stops · 2.4 km · ~70 min</div><span class="chip blue">Download 48 MB</span></div>
+                  <span class="st" style="color:var(--grey)"><svg><use href="#i-dl"/></svg></span>
+                </div>
+                <div style="height:20px"></div>
+              </div>
+            </div>
+            <nav class="bottomnav" data-nav></nav>
+          </section>
+
+          <!-- ================= 3. TRAIL MODE ================= -->
+          <section class="screen" id="s-trail">
+            <div class="statusbar"><span>9:41</span><span class="icons" data-sb></span></div>
+            <div class="appbar"><button class="back" data-back="home"><svg width="22" height="22" style="stroke:var(--ink);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><use href="#i-chev-l"/></svg></button><span id="trailTitle">Canopy Trail</span></div>
+            <div class="content">
+              <div class="tm-map">
+                <svg viewBox="0 0 390 400" preserveAspectRatio="none">
+                  <defs><pattern id="g2" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#DEE6DC" stroke-width="1"/></pattern></defs>
+                  <rect width="390" height="400" fill="#E8F0E6"/><rect width="390" height="400" fill="url(#g2)"/>
+                  <path d="M0 312 L117 280 L215 328 L390 296" stroke="#B0CEE8" stroke-width="10" fill="none" stroke-linecap="round"/>
+                  <path d="M39 0 L97 160 L78 400" stroke="#fff" stroke-width="7" fill="none"/><path d="M0 120 L234 112 L390 180" stroke="#fff" stroke-width="7" fill="none"/>
+                  <circle cx="281" cy="72" r="26" fill="#CDE2C8"/><circle cx="331" cy="220" r="20" fill="#CDE2C8"/><circle cx="175" cy="240" r="18" fill="#CDE2C8"/><circle cx="117" cy="48" r="14" fill="#CDE2C8"/>
+                  <path id="route" d="M39 312 L117 248 L203 220 L242 140 L320 100" stroke="#1F7A5C" stroke-width="4" fill="none" stroke-dasharray="9 7" stroke-linecap="round"/>
+                  <g id="stops"></g>
+                </svg>
+                <div class="userdot" id="userdot" style="left:183px;top:228px"></div>
+                <div style="position:absolute;left:16px;top:12px;display:flex;gap:6px"><span class="chip"><svg width="12" height="12" style="stroke:currentColor;fill:none;stroke-width:2"><use href="#i-wifioff"/></svg>Offline</span><span class="chip amber"><svg width="12" height="12" style="stroke:currentColor;fill:none;stroke-width:2"><use href="#i-batt"/></svg>Battery saver</span></div>
+                <button class="chip" id="walk" style="position:absolute;right:16px;top:12px;border:0;cursor:pointer;background:#fff;box-shadow:var(--shadow);height:28px;font-size:11px"><svg width="12" height="12" style="fill:var(--acc)"><use href="#i-play"/></svg>Walk to next stop</button>
+                <div class="nextbar"><span class="pin" id="nextpin">3</span><span id="nexttext">Next: Stop 3 · 40 m ahead</span><span style="margin-left:auto;color:var(--acc);font-size:10px">GPS ●</span></div>
+              </div>
+              <div class="card player">
+                <div class="row" style="align-items:flex-start">
+                  <div class="art"><svg viewBox="0 0 76 76" width="60" height="60"><circle cx="38" cy="38" r="22" fill="#BE3C46"/><circle cx="38" cy="38" r="9" fill="#781E28"/></svg></div>
+                  <div style="min-width:0">
+                    <div class="small" style="color:var(--acc);font-weight:800;letter-spacing:.3px" id="npLabel">NOW PLAYING · STOP 3 OF 12</div>
+                    <b style="font-size:13px;display:block;margin-top:4px" id="npTitle">Rafflesia keithii viewing site</b>
+                    <div class="small muted" style="margin-top:4px" id="npSub">Auto-played when you entered the stop zone</div>
+                  </div>
+                </div>
+                <div class="progress" style="margin-top:12px"><i id="npBar" style="width:42%"></i></div>
+                <div class="row between small muted" style="margin-top:4px"><span id="npT">0:38</span><span id="npD">1:30</span></div>
+                <div class="ctl">
+                  <button class="linkbtn" id="transcriptBtn" style="position:absolute;left:0">Transcript</button>
+                  <button class="cbtn" id="prevBtn"><svg><use href="#i-prev"/></svg></button>
+                  <button class="playbig" id="playBtn"><svg id="playIcon"><use href="#i-pause"/></svg></button>
+                  <button class="cbtn" id="nextBtn"><svg><use href="#i-next"/></svg></button>
+                  <button class="linkbtn" id="langBtn" style="position:absolute;right:0">EN ▾</button>
+                </div>
+              </div>
+              <div class="quick"><button class="btn primary" data-go="camera">Identify</button><button class="btn outline" id="stopListBtn">Stop list</button></div>
+              <div style="height:18px"></div>
+            </div>
+            <nav class="bottomnav" data-nav></nav>
+          </section>
+
+          <!-- ================= 4. CAMERA ================= -->
+          <section class="screen cam" id="s-camera">
+            <div class="scene">
+              <svg viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice">
+                <rect width="390" height="844" fill="#1C241E"/>
+                <ellipse cx="90" cy="420" rx="80" ry="40" fill="#2E5438" transform="rotate(23 90 420)"/>
+                <ellipse cx="300" cy="360" rx="70" ry="35" fill="#36603E" transform="rotate(-52 300 360)"/>
+                <ellipse cx="210" cy="520" rx="95" ry="47" fill="#284C32" transform="rotate(69 210 520)"/>
+                <ellipse cx="120" cy="620" rx="70" ry="35" fill="#3A6442" transform="rotate(-17 120 620)"/>
+                <ellipse cx="330" cy="560" rx="60" ry="30" fill="#2E5438" transform="rotate(52 330 560)"/>
+                <g id="flower"><circle cx="205" cy="440" r="46" fill="#AA3C46"/>
+                  <circle cx="245" cy="440" r="20" fill="#B94650"/><circle cx="217" cy="478" r="20" fill="#B94650"/><circle cx="173" cy="464" r="20" fill="#B94650"/><circle cx="173" cy="416" r="20" fill="#B94650"/><circle cx="217" cy="402" r="20" fill="#B94650"/>
+                  <circle cx="205" cy="440" r="16" fill="#78232D"/></g>
+              </svg>
+            </div>
+            <div class="statusbar" style="position:relative;z-index:3"><span>9:41</span><span class="icons" data-sb data-dark></span></div>
+            <div class="appbar" style="position:relative;z-index:3"><button class="back" data-back="trail"><svg width="22" height="22" style="stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><use href="#i-chev-l"/></svg></button>Identify</div>
+            <div class="content">
+              <div style="position:absolute;left:0;right:0;top:2px;text-align:center"><span class="chip" style="background:#fff"><svg width="12" height="12" style="stroke:currentColor;fill:none;stroke-width:2"><use href="#i-wifioff"/></svg>Works offline</span></div>
+              <div class="hint" id="camHint">Point at a plant, animal or landmark</div>
+              <div class="bracket b1"></div><div class="bracket b2"></div><div class="bracket b3"></div><div class="bracket b4"></div>
+              <div class="recog">
+                <b id="recogLabel">Searching…</b><span class="pct" id="recogPct">0%</span>
+                <div class="small muted" style="margin-top:2px" id="recogSub">Hold steady · confidence building</div>
+                <div class="progress" style="margin-top:8px;height:6px"><i id="recogBar"></i></div>
+              </div>
+              <div class="shutterrow">
+                <button class="sq" data-toast="Flash is off – Rafflesia blooms are photographed in natural light"><svg width="18" height="18" style="fill:#fff"><use href="#i-flash"/></svg></button>
+                <button class="shutter" id="shutter" title="Capture"></button>
+                <button class="sq" data-toast="Gallery: identify from a saved photo (processed on device)"><div style="width:24px;height:24px;background:#C8D2C8;border-radius:3px"></div></button>
+              </div>
+              <div class="camcap">Tap to capture and save to Journal</div>
+            </div>
+          </section>
+
+          <!-- ================= 5. RESULT ================= -->
+          <section class="screen" id="s-result">
+            <div class="statusbar"><span>9:41</span><span class="icons" data-sb></span></div>
+            <div class="appbar"><button class="back" data-back="camera"><svg width="22" height="22" style="stroke:var(--ink);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><use href="#i-chev-l"/></svg></button>Identification result</div>
+            <div class="content">
+              <div class="photo">
+                <svg viewBox="0 0 342 170" preserveAspectRatio="xMidYMid slice">
+                  <rect width="342" height="170" fill="#3C6046"/>
+                  <ellipse cx="66" cy="108" rx="60" ry="30" fill="#36603E" transform="rotate(34 66 108)"/><ellipse cx="276" cy="58" rx="70" ry="35" fill="#2E5438" transform="rotate(-40 276 58)"/>
+                  <circle cx="171" cy="86" r="40" fill="#AA3C46"/><circle cx="171" cy="86" r="14" fill="#6E1E28"/>
+                </svg>
+                <span class="chip white" style="position:absolute;left:12px;top:12px;color:var(--acc)" id="matchChip">92% match</span>
+                <span class="chip white" style="position:absolute;right:12px;top:12px;color:var(--grey)">Identified offline</span>
+              </div>
+              <div class="pad" style="margin-top:14px">
+                <h1 class="title">Rafflesia keithii</h1>
+                <div class="muted" style="font-size:11.5px;margin-top:3px">Bunga Pakma · world's largest flower genus</div>
+                <div class="row" style="gap:8px;margin-top:8px"><span class="chip">Endemic to Sabah</span><span class="chip red">Protected species</span></div>
+              </div>
+              <div class="tabs" id="tabs"><button class="on" data-tab="about">About</button><button data-tab="audio">Audio</button><button data-tab="video">Video</button><button data-tab="nearby">Nearby</button></div>
+              <div class="tabpane on" data-pane="about">Rafflesia keithii is a parasitic flower found only in Sabah. Blooms last around five to seven days and can reach 90 cm across. It has no leaves, stems or roots and takes its nutrients from the <i>Tetrastigma</i> vine.</div>
+              <div class="tabpane" data-pane="audio">Narration available in Bahasa Malaysia, English and 中文 (1:12 each). Transcript included for accessibility. Files are stored in the Tawau Hills offline pack (2.1 MB).</div>
+              <div class="tabpane" data-pane="video">Bloom time-lapse (0:28, 4 MB). Streams adaptively on Wi-Fi; a low-resolution copy is bundled in the offline pack.</div>
+              <div class="tabpane" data-pane="nearby">Two other known bloom sites within 400 m: Stop 7 (Rafflesia bud, due in ~3 weeks) and the Ranger station display. Reports from the park office: 2 this month.</div>
+              <div class="card media" id="narr"><div class="pl"><svg id="narrIcon"><use href="#i-play"/></svg></div><div><b>Play narration (1:12)</b><div class="s">BM · EN · 中文 · transcript available</div></div><div style="margin-left:auto;width:70px"><div class="progress"><i id="narrBar"></i></div></div></div>
+              <div class="card media" data-toast="Video streams on Wi-Fi only (see Settings › Data & battery)"><div class="vid"><svg width="14" height="14" style="fill:#fff"><use href="#i-play"/></svg></div><div><b>Bloom time-lapse (0:28)</b><div class="s">Streams on Wi-Fi · 4 MB</div></div></div>
+              <div class="pad row" style="gap:12px;margin:14px 0 24px"><button class="btn primary" style="flex:1;height:44px;font-size:12.5px" id="saveBtn">Save to Journal</button><button class="btn outline" style="flex:1;height:44px;font-size:12.5px" data-toast="Thanks – flagged for review by a park guide">Report incorrect</button></div>
+            </div>
+            <nav class="bottomnav" data-nav></nav>
+          </section>
+
+          <!-- ================= 6. SETTINGS ================= -->
+          <section class="screen" id="s-settings">
+            <div class="statusbar"><span>9:41</span><span class="icons" data-sb></span></div>
+            <div class="appbar"><button class="back" data-back="home"><svg width="22" height="22" style="stroke:var(--ink);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><use href="#i-chev-l"/></svg></button>Offline packs &amp; privacy</div>
+            <div class="content">
+              <div class="sec">OFFLINE PACKS</div>
+              <div class="card group" id="packs">
+                <div class="dlrow" data-pack="0"><div class="t"><b>Tawau Hills Park</b><div class="d">48 MB · maps, audio, images, model</div></div><span class="check"><svg><use href="#i-check"/></svg></span></div>
+                <div class="dlrow" data-pack="1"><div class="t"><b>Sebatik Mangrove Boardwalk</b><div class="d" data-d>22 MB · downloading 60%</div><div class="progress" data-p><i style="width:60%"></i></div></div><button class="iconbtn grey" data-act><svg><use href="#i-pause"/></svg></button></div>
+                <div class="dlrow" data-pack="2"><div class="t"><b>Kinabalu Park Botanical</b><div class="d" data-d>64 MB · includes 30 s videos</div><div class="progress" data-p style="display:none"><i style="width:0%"></i></div></div><button class="iconbtn" data-act><svg><use href="#i-dl"/></svg></button></div>
+                <div class="small muted" style="padding:10px 0 4px" id="storage">Storage used 70 MB of 2.1 GB free</div>
+                <div class="progress" style="margin-bottom:8px;background:#E8E8E8"><i id="storageBar" style="width:8%;background:#9A9A9A"></i></div>
+              </div>
+              <div class="sec">DATA &amp; BATTERY</div>
+              <div class="card group">
+                <div class="srow"><div class="t"><b>Download on Wi-Fi only</b></div><div class="r"><button class="toggle on" data-set="wifi"></button></div></div>
+                <div class="srow"><div class="t"><b>Battery saver (lower GPS rate)</b></div><div class="r"><button class="toggle on" data-set="batt"></button></div></div>
+                <div class="srow"><div class="t"><b>Stream video on mobile data</b></div><div class="r"><button class="toggle" data-set="video"></button></div></div>
+              </div>
+              <div class="sec">PRIVACY</div>
+              <div class="card group">
+                <div class="srow" data-toast="System dialog: Location – Only while using the app (recommended)"><div class="t"><b>Location access</b><div class="d">Only while using the app</div></div><div class="r"><svg><use href="#i-chev-r"/></svg></div></div>
+                <div class="srow" data-toast="Camera frames are processed on-device by the TFLite model and are never uploaded"><div class="t"><b>Camera images</b><div class="d">Processed on device, never uploaded</div></div><div class="r"><svg><use href="#i-chev-r"/></svg></div></div>
+                <div class="srow"><div class="t"><b>Share anonymous usage statistics</b><div class="d">Helps improve trails (opt-in)</div></div><div class="r"><button class="toggle" data-set="stats"></button></div></div>
+                <button class="danger" id="deleteBtn">Delete my Journal and all local data</button>
+              </div>
+              <div style="height:20px"></div>
+            </div>
+            <nav class="bottomnav" data-nav></nav>
+          </section>
+
+          <!-- ================= + JOURNAL ================= -->
+          <section class="screen" id="s-journal">
+            <div class="statusbar"><span>9:41</span><span class="icons" data-sb></span></div>
+            <div class="content">
+              <div class="pad row between" style="margin-top:4px"><h1 class="title">Trail Journal</h1><span class="chip grey">Stored on this phone</span></div>
+              <div class="badges"><div class="badge"><b id="jStops">2</b>stops visited</div><div class="badge"><b id="jSpecies">2</b>species identified</div><div class="badge"><b id="jBadges">1</b>badges earned</div></div>
+              <div id="journalList"></div>
+              <div class="pad" style="margin:6px 0 20px"><button class="btn outline block" style="height:44px;font-size:13px" data-toast="Export creates a PDF on your phone – nothing is uploaded">Export my journal</button></div>
+            </div>
+            <nav class="bottomnav" data-nav></nav>
+          </section>
+
+          <!-- overlays -->
+          <div class="toast" id="toast"></div>
+          <div class="sheetwrap" id="sheet"><div class="sheet" id="sheetBody"></div></div>
+          <div class="modal" id="modal"><div class="box" id="modalBody"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+  const vp=$('#viewport');
+  const screens={onboarding:1,home:2,trail:3,camera:4,result:5,settings:6,journal:7};
+  const names={onboarding:'1 – Onboarding',home:'2 – Home / Explore',trail:'3 – Trail Mode',camera:'4 – Identify (camera)',result:'5 – Result card',settings:'6 – Offline packs & privacy',journal:'+ Trail Journal'};
+  let current=null;
+  const state={lang:'EN',journal:[{t:'Bornean orangutan (sighting)',s:'Stop 1 · 09:12 · photo'},{t:'Tawau Hills Park – Canopy Trail',s:'Started 09:05 · 2 of 12 stops'}],saved:false,
+    stops:[{n:1,t:'Trailhead & ranger station',x:39,y:312,done:true},{n:2,t:'Dipterocarp giants',x:117,y:248,done:true},{n:3,t:'Rafflesia keithii viewing site',x:203,y:220,done:false},{n:4,t:'Canopy walkway',x:242,y:140,done:false},{n:5,t:'Hornbill lookout',x:320,y:100,done:false}],
+    stopIdx:2,playing:true,pos:42,timer:null,walking:false,recogTimer:null,narrTimer:null,narrOn:false};
+
+  /* ---------- status bar icons & bottom nav ---------- */
+  const sbSVG=(dark)=>{const c=dark?'#fff':'#212121';return `<svg width="16" height="12" viewBox="0 0 16 12"><rect x="0" y="8" width="3" height="4" fill="${c}"/><rect x="4.3" y="5.5" width="3" height="6.5" fill="${c}"/><rect x="8.6" y="3" width="3" height="9" fill="${c}"/><rect x="12.9" y="0" width="3" height="12" fill="${c}"/></svg>
+  <svg width="16" height="12" viewBox="0 0 16 12"><path d="M1 4.2a10 10 0 0 1 14 0M3.3 6.6a6.5 6.5 0 0 1 9.4 0M5.7 9a3 3 0 0 1 4.6 0" stroke="${c}" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="8" cy="11" r="1" fill="${c}"/></svg>
+  <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="${c}" fill="none"/><rect x="2" y="2" width="15" height="8" rx="1" fill="${c}"/><rect x="22.5" y="3.5" width="2" height="5" rx="1" fill="${c}"/></svg>`};
+  $$('[data-sb]').forEach(e=>e.innerHTML=sbSVG(e.hasAttribute('data-dark')));
+  const navHTML=`<button data-go="home"><span class="ic"><svg><use href="#i-home"/></svg></span>Explore</button><button data-go="camera"><span class="ic"><svg><use href="#i-cam"/></svg></span>Identify</button><button data-go="journal"><span class="ic"><svg><use href="#i-book"/></svg></span>Journal</button><button data-go="settings"><span class="ic"><svg><use href="#i-gear"/></svg></span>Settings</button>`;
+  $$('[data-nav]').forEach(n=>n.innerHTML=navHTML);
+
+  /* ---------- navigation ---------- */
+  function go(id,opts={}){
+    if(!screens[id]||id===current)return;
+    const prev=current; current=id;
+    $$('.screen').forEach(s=>{s.classList.remove('active','back')});
+    if(prev&&screens[prev]>screens[id]){const p=$('#s-'+prev);p.classList.add('back')}
+    const el=$('#s-'+id); el.classList.add('active'); el.querySelector('.content').scrollTop=0;
+    vp.classList.toggle('dark',id==='camera');
+    $$('.bottomnav button').forEach(b=>b.classList.toggle('active',b.dataset.go===(id==='trail'?'home':id)));
+    $$('#navlist button').forEach(b=>b.classList.toggle('active',b.dataset.go===id));
+    $('#crumb').textContent=names[id];
+    try{if(location.hash!=='#'+id)history.replaceState(null,'','#'+id)}catch(e){}
+    if(id==='camera')startRecognition(); else stopRecognition();
+    if(id==='journal')renderJournal();
+    if(id!=='trail'&&state.timer){clearInterval(state.timer);state.timer=null}
+    if(id==='trail'&&state.playing)startPlayer();
+  }
+  document.addEventListener('click',e=>{
+    const g=e.target.closest('[data-go]'); if(g){go(g.dataset.go);return}
+    const b=e.target.closest('[data-back]'); if(b){go(b.dataset.back);return}
+    const t=e.target.closest('[data-toast]'); if(t){toast(t.dataset.toast);return}
+    const tg=e.target.closest('.toggle'); if(tg){tg.classList.toggle('on');onToggle(tg);return}
+  });
+  window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(screens[h])go(h)});
+
+  /* ---------- toast / sheet / modal ---------- */
+  let toastT; function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200)}
+  function sheet(html){$('#sheetBody').innerHTML='<div class="grab"></div>'+html;$('#sheet').classList.add('show')}
+  $('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')$('#sheet').classList.remove('show')});
+  function closeSheet(){$('#sheet').classList.remove('show')}
+  function modal(html){$('#modalBody').innerHTML=html;$('#modal').classList.add('show')}
+  function closeModal(){$('#modal').classList.remove('show')}
+
+  /* ---------- onboarding ---------- */
+  $('#langs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('#langs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');state.lang=b.dataset.lang;$('#langBtn').textContent=state.lang+' ▾';toast({BM:'Bahasa Malaysia dipilih – narasi akan dimainkan dalam BM',EN:'English selected – narration will play in English',ZH:'已选择中文 – 解说将以中文播放'}[state.lang])});
+  function onToggle(tg){
+    if(tg.dataset.perm==='location'&&!tg.classList.contains('on')){toast('Without location, narration must be started manually at each stop')}
+    if(tg.dataset.perm==='camera'&&!tg.classList.contains('on')){toast('Identify will be unavailable until camera access is granted')}
+    if(tg.dataset.perm==='mic'){toast(tg.classList.contains('on')?'Microphone enabled – used only while you hold the record button':'Microphone stays off')}
+    if(tg.dataset.set==='batt'){toast(tg.classList.contains('on')?'Battery saver on: GPS sampled every 10 s, animations off':'Battery saver off: precise GPS, full animations')}
+    if(tg.dataset.set==='wifi'){toast(tg.classList.contains('on')?'Packs download on Wi-Fi only':'Packs may download on mobile data')}
+    if(tg.dataset.set==='video'){toast(tg.classList.contains('on')?'Video will stream on mobile data (about 4 MB per clip)':'Video streams on Wi-Fi only')}
+    if(tg.dataset.set==='stats'){toast(tg.classList.contains('on')?'Thank you – anonymous trail statistics will be shared':'No usage statistics are shared')}
+  }
+  $('#continue').addEventListener('click',()=>{go('home');toast('Nearby trails ranked by GPS distance')});
+
+  /* ---------- home ---------- */
+  const trailNames=['Canopy Trail','Mangrove Boardwalk','Rainforest Discovery'];
+  const packReady=[true,false,false];
+  $('#trails').addEventListener('click',e=>{const c=e.target.closest('.trail');if(!c)return;openTrail(+c.dataset.trail)});
+  function openTrail(i){
+    if(packReady[i]){$('#trailTitle').textContent=trailNames[i];go('trail');return}
+    const size=i===1?'22 MB':'48 MB';
+    sheet(`<h3>Download offline pack?</h3><p><b>${trailNames[i]}</b> · ${size} · maps, audio, images and the on-device model. You are on Wi-Fi, so this is free. Once downloaded, the whole trail works with no signal.</p>
+      <div class="progress" style="margin:4px 0 14px"><i id="dlbar"></i></div>
+      <div class="row" style="gap:10px"><button class="btn outline" style="flex:1;height:42px" id="dlCancel">Later</button><button class="btn primary" style="flex:1;height:42px" id="dlGo">Download</button></div>`);
+    $('#dlCancel').onclick=closeSheet;
+    $('#dlGo').onclick=()=>{let p=0;$('#dlGo').textContent='Downloading…';$('#dlGo').disabled=true;const iv=setInterval(()=>{p+=7;$('#dlbar').style.width=Math.min(p,100)+'%';if(p>=100){clearInterval(iv);packReady[i]=true;const st=$$('#trails .trail')[i].querySelector('.st');st.style.color='';st.innerHTML='<span class="check"><svg><use href="#i-check"/></svg></span>';closeSheet();$('#trailTitle').textContent=trailNames[i];go('trail');toast('Pack downloaded – trail available offline')}},90)};
+  }
+
+  /* ---------- trail mode ---------- */
+  function renderStops(){
+    $('#stops').innerHTML=state.stops.map((s,i)=>`<g data-stop="${i}" style="cursor:pointer"><path d="M${s.x} ${s.y+2}c-8-10-11-15-11-22a11 11 0 1 1 22 0c0 7-3 12-11 22z" fill="${s.done?'#969696':'#1F7A5C'}"/><text x="${s.x}" y="${s.y-16}" text-anchor="middle" font-size="11" font-weight="700" fill="#fff" font-family="inherit">${s.n}</text></g>`).join('');
+  }
+  renderStops();
+  $('#stops').addEventListener('click',e=>{const g=e.target.closest('[data-stop]');if(!g)return;const s=state.stops[+g.dataset.stop];toast(`Stop ${s.n}: ${s.t}${s.done?' (visited)':''}`)});
+  function fmt(sec){return Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0')}
+  function updatePlayer(){const s=state.stops[state.stopIdx];$('#npLabel').textContent=`NOW PLAYING · STOP ${s.n} OF 12`;$('#npTitle').textContent=s.t;$('#npBar').style.width=state.pos+'%';$('#npT').textContent=fmt(Math.round(90*state.pos/100));
+    const nxt=state.stops[Math.min(state.stopIdx+1,state.stops.length-1)];$('#nextpin').textContent=nxt.n;$('#nexttext').textContent=state.stopIdx>=state.stops.length-1?'Final stop reached – tap Stop list for summary':`Next: Stop ${nxt.n} · ${[180,120,40,160,90][state.stopIdx]} m ahead`;
+    $('#playIcon').innerHTML=`<use href="#${state.playing?'i-pause':'i-play'}"/>`}
+  function startPlayer(){if(state.timer)clearInterval(state.timer);state.timer=setInterval(()=>{if(!state.playing)return;state.pos+=0.6;if(state.pos>=100){state.pos=100;state.playing=false}updatePlayer()},300)}
+  $('#playBtn').addEventListener('click',()=>{state.playing=!state.playing;if(state.playing&&state.pos>=100)state.pos=0;updatePlayer();toast(state.playing?'Narration playing':'Narration paused')});
+  $('#prevBtn').addEventListener('click',()=>{state.pos=0;updatePlayer();toast('Restarted narration')});
+  $('#nextBtn').addEventListener('click',()=>{state.pos=100;state.playing=false;updatePlayer();toast('Skipped to end – next narration will auto-play at the next stop')});
+  $('#langBtn').addEventListener('click',()=>{const order=['EN','BM','ZH'];state.lang=order[(order.indexOf(state.lang)+1)%3];$('#langBtn').textContent=state.lang+' ▾';$$('#langs button').forEach(x=>x.classList.toggle('on',x.dataset.lang===state.lang));toast('Narration language: '+{EN:'English',BM:'Bahasa Malaysia',ZH:'中文 (Mandarin)'}[state.lang])});
+  $('#transcriptBtn').addEventListener('click',()=>sheet(`<h3>Transcript · Stop ${state.stops[state.stopIdx].n}</h3><p>${state.stopIdx===2?'“You are standing beside one of the few places on Earth where <i>Rafflesia keithii</i> blooms. Look for the cabbage-sized bud at the base of the vine to your left. The flower has no leaves, stems or roots — it lives entirely inside its host, the <i>Tetrastigma</i> vine, and opens for only five to seven days…”':'“'+state.stops[state.stopIdx].t+' — narration transcript (demo). The full script is bundled in the offline pack for every stop in BM, EN and 中文.”'}</p><p class="muted small">Large-text and high-contrast modes available in Settings › Accessibility.</p>`));
+  $('#stopListBtn').addEventListener('click',()=>{sheet('<h3>Stops on this trail</h3>'+state.stops.map((s,i)=>`<div class="list-item" data-jump="${i}"><span class="pin ${s.done?'done':''}">${s.n}</span><div><b style="font-size:13px">${s.t}</b><div class="small muted">${s.done?'Visited · narration available':i===state.stopIdx?'You are here':'Ahead'}</div></div><span style="margin-left:auto" class="small muted">${i===state.stopIdx?'●':''}</span></div>`).join('')+'<div class="list-item" style="color:var(--grey)">… 7 more stops</div>');
+    $$('#sheetBody [data-jump]').forEach(el=>el.onclick=()=>{const i=+el.dataset.jump;closeSheet();if(state.stops[i].done||i===state.stopIdx){state.stopIdx=i;state.pos=0;state.playing=true;updatePlayer();moveDot(i);toast('Replaying narration for Stop '+state.stops[i].n)}else toast('Narration for Stop '+state.stops[i].n+' unlocks when you reach it')})});
+  function moveDot(i){const s=state.stops[i];const d=$('#userdot');d.style.left=(s.x-20)+'px';d.style.top=(s.y+8)+'px'}
+  $('#walk').addEventListener('click',()=>{if(state.walking)return;if(state.stopIdx>=state.stops.length-1){toast('You have reached the final stop of this demo');return}
+    state.walking=true;const i=state.stopIdx+1;const s=state.stops[i];const d=$('#userdot');d.style.left=(s.x+2)+'px';d.style.top=(s.y+2)+'px';$('#walk').textContent='Walking…';
+    setTimeout(()=>{state.stops[state.stopIdx].done=true;state.stopIdx=i;state.pos=0;state.playing=true;renderStops();updatePlayer();$('#npSub').textContent='Auto-played when you entered the stop zone';$('#walk').innerHTML='<svg width="12" height="12" style="fill:var(--acc)"><use href="#i-play"/></svg>Walk to next stop';state.walking=false;toast(`Geofence entered: Stop ${s.n} – narration started automatically`);state.journal.push({t:s.t,s:`Stop ${s.n} · reached ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`})},1700)});
+  updatePlayer();
+
+  /* ---------- camera ---------- */
+  function startRecognition(){stopRecognition();let p=0;$('#shutter').classList.remove('ready');$('#recogLabel').textContent='Searching…';$('#recogSub').textContent='Hold steady · confidence building';$('#camHint').textContent='Point at a plant, animal or landmark';
+    state.recogTimer=setInterval(()=>{p+=3;if(p>92){p=92;clearInterval(state.recogTimer);state.recogTimer=null;$('#shutter').classList.add('ready');$('#recogSub').textContent='Ready – tap the shutter to capture';$('#camHint').textContent='Identified on device · no photo uploaded'}
+      $('#recogPct').textContent=p+'%';$('#recogBar').style.width=p+'%';$('#recogLabel').textContent=p<30?'Searching…':p<60?'Recognising… flowering plant':'Recognising…  Rafflesia keithii'},70)}
+  function stopRecognition(){if(state.recogTimer){clearInterval(state.recogTimer);state.recogTimer=null}}
+  $('#shutter').addEventListener('click',()=>{if(state.recogTimer){toast('Hold steady – still recognising');return}$('#shutter').style.transform='scale(.9)';setTimeout(()=>$('#shutter').style.transform='',120);setTimeout(()=>go('result'),180)});
+
+  /* ---------- result ---------- */
+  $('#tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('#tabs button').forEach(x=>x.classList.toggle('on',x===b));$$('.tabpane').forEach(p=>p.classList.toggle('on',p.dataset.pane===b.dataset.tab))});
+  $('#narr').addEventListener('click',()=>{state.narrOn=!state.narrOn;$('#narrIcon').innerHTML=`<use href="#${state.narrOn?'i-pause':'i-play'}"/>`;if(state.narrOn){let p=parseFloat($('#narrBar').style.width)||0;state.narrTimer=setInterval(()=>{p+=1.2;if(p>=100){p=100;clearInterval(state.narrTimer);state.narrOn=false;$('#narrIcon').innerHTML='<use href="#i-play"/>'}$('#narrBar').style.width=p+'%'},200);toast('Playing narration in '+{EN:'English',BM:'Bahasa Malaysia',ZH:'中文'}[state.lang])}else{clearInterval(state.narrTimer);toast('Narration paused')}});
+  $('#saveBtn').addEventListener('click',()=>{if(state.saved){go('journal');return}state.saved=true;state.journal.unshift({t:'Rafflesia keithii',s:'Identified offline · 92% · Stop 3',sp:true});$('#saveBtn').textContent='Saved ✓ – open Journal';toast('Saved to Journal (stored on this phone only)')});
+
+  /* ---------- journal ---------- */
+  function renderJournal(){const l=$('#journalList');if(!state.journal.length){l.innerHTML='<div class="empty">Your Journal is empty.<br>Identify a species or finish a stop to start collecting.</div>';$('#jStops').textContent=0;$('#jSpecies').textContent=0;$('#jBadges').textContent=0;return}
+    l.innerHTML=state.journal.map(j=>`<div class="card jcard" data-toast="${j.t} – details, photo and narration"><div class="th">${j.sp?'<svg viewBox="0 0 56 56" width="56" height="56"><circle cx="28" cy="28" r="17" fill="#BE3C46"/><circle cx="28" cy="28" r="6" fill="#781E28"/></svg>':'<svg viewBox="0 0 56 56" width="56" height="56"><ellipse cx="28" cy="28" rx="17" ry="9" fill="#78AA6E" transform="rotate(34 28 28)"/></svg>'}</div><div><b>${j.t}</b><div class="small muted" style="margin-top:3px">${j.s}</div></div><svg width="16" height="16" style="margin-left:auto;stroke:var(--grey);fill:none;stroke-width:2"><use href="#i-chev-r"/></svg></div>`).join('');
+    const sp=state.journal.filter(j=>j.sp||/orangutan/i.test(j.t)).length;$('#jSpecies').textContent=sp;$('#jStops').textContent=state.stops.filter(s=>s.done).length;$('#jBadges').textContent=sp>=2?2:1}
+
+  /* ---------- settings ---------- */
+  const packs=[{state:'done'},{state:'paused',p:60},{state:'idle',p:0}];let packTimers=[null,null,null];
+  $('#packs').addEventListener('click',e=>{const row=e.target.closest('[data-pack]');const act=e.target.closest('[data-act]');if(!row||!act)return;const i=+row.dataset.pack;const pk=packs[i];const bar=row.querySelector('[data-p]');const d=row.querySelector('[data-d]');
+    if(pk.state==='downloading'){pk.state='paused';clearInterval(packTimers[i]);act.innerHTML='<svg><use href="#i-dl"/></svg>';act.classList.remove('grey');d.textContent=d.textContent.replace('downloading','paused at');toast('Download paused');return}
+    pk.state='downloading';bar.style.display='';act.innerHTML='<svg><use href="#i-pause"/></svg>';act.classList.add('grey');const base=i===1?'22 MB':'64 MB';
+    packTimers[i]=setInterval(()=>{pk.p=Math.min(100,pk.p+2);bar.firstElementChild.style.width=pk.p+'%';d.textContent=`${base} · downloading ${pk.p}%`;if(pk.p>=100){clearInterval(packTimers[i]);pk.state='done';bar.style.display='none';d.textContent=`${base} · ready offline`;act.outerHTML='<span class="check"><svg><use href="#i-check"/></svg></span>';if(i===1)packReady[1]=true;const used=70+(i===1?22:64);$('#storage').textContent=`Storage used ${used} MB of 2.1 GB free`;$('#storageBar').style.width=(used/2100*100+5)+'%';toast('Pack ready – trail works offline')}},60);toast('Downloading on Wi-Fi…')});
+  $('#deleteBtn').addEventListener('click',()=>{modal(`<h3>Delete all local data?</h3><p>This removes your Journal, photos, voice notes and visited-stop history from this phone. Offline packs are kept. Nothing was ever stored on a server, so this is the only copy.</p><div class="acts"><button class="btn outline" id="mCancel">Cancel</button><button class="btn red" id="mOk">Delete</button></div>`);$('#mCancel').onclick=closeModal;$('#mOk').onclick=()=>{state.journal=[];state.saved=false;$('#saveBtn').textContent='Save to Journal';state.stops.forEach(s=>s.done=false);renderStops();closeModal();toast('All local data deleted')}});
+
+  /* ---------- scale to fit & misc ---------- */
+  function fit(){const wrap=$('.stagewrap');const s=Math.min(1,(wrap.clientHeight-20)/868,(wrap.clientWidth-20)/414);$('#stage').style.transform=`scale(${s})`;$('#stage').style.marginTop=`${-(868-868*s)/2}px`;$('#stage').style.marginBottom=`${-(868-868*s)/2}px`}
+  window.addEventListener('resize',fit);fit();
+  $('#reset').addEventListener('click',()=>{try{location.reload()}catch(e){toast('Reload the page to reset the prototype')}});
+  const h=location.hash.slice(1); go(screens[h]?h:'onboarding');
+})();
+</script>
+</body>
+</html>
