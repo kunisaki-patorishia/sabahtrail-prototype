@@ -6,12 +6,12 @@
 <title>SabahTrail – Interactive Prototype (CBMC4103)</title>
 <style>
   :root{
-    --acc:#1F7A5C; --acc-l:#D6ECE2; --acc-d:#165C45; --ink:#212121; --grey:#787878; --lgrey:#E0E0E0; --xl:#F0F0F0;
+    --acc:#1F7A5C; --acc-l:#D6ECE2; --acc-d:#165C45; --ink:#212121; --grey:#5E5E5E; --lgrey:#E0E0E0; --xl:#F0F0F0;
     --mapbg:#E8F0E6; --blue:#2979FF; --red:#D32F2F; --amber-bg:#FFF3D6; --amber:#A06400; --white:#fff;
     --radius:14px; --shadow:0 2px 6px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.04);
   }
   *{box-sizing:border-box}
-  html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:#EEF2EF}
+  html,body{margin:0;height:100%;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:#EEF2EF}
   body{display:flex;flex-direction:column;min-height:100vh}
   header.top{display:flex;align-items:center;justify-content:space-between;padding:12px 22px;background:#fff;border-bottom:1px solid #E3E8E4}
   header.top h1{font-size:16px;margin:0;font-weight:700;letter-spacing:.2px}
@@ -58,7 +58,7 @@
   .btn.primary:hover{background:var(--acc-d)}
   .btn.outline{background:#fff;color:var(--acc);border:1.5px solid var(--acc)}
   .btn.block{width:100%}
-  .chip{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;border-radius:11px;font-size:10.5px;font-weight:700;background:var(--acc-l);color:var(--acc);white-space:nowrap}
+  .chip{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;border-radius:11px;font-size:11px;font-weight:700;background:var(--acc-l);color:var(--acc);white-space:nowrap}
   .chip.blue{background:#E8F0FF;color:var(--blue)}
   .chip.amber{background:var(--amber-bg);color:var(--amber)}
   .chip.white{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
@@ -71,14 +71,14 @@
   .progress{height:5px;border-radius:3px;background:#E1E1E1;overflow:hidden}
   .progress > i{display:block;height:100%;background:var(--acc);border-radius:3px;width:0%;transition:width .3s linear}
   .bottomnav{flex:none;height:78px;border-top:1px solid #E1E1E1;display:flex;background:#fff;position:relative}
-  .bottomnav button{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:8px;gap:4px;font-size:10px;color:var(--grey);cursor:pointer}
+  .bottomnav button{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:8px;gap:4px;font-size:11px;color:var(--grey);cursor:pointer}
   .bottomnav button .ic{width:60px;height:28px;border-radius:14px;display:grid;place-items:center}
   .bottomnav button.active{color:var(--acc);font-weight:700}
   .bottomnav button.active .ic{background:var(--acc-l)}
   .bottomnav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
   h1.title{font-size:20px;margin:0;font-weight:700}
   .muted{color:var(--grey)}
-  .small{font-size:11px}
+  .small{font-size:11.5px}
   .row{display:flex;align-items:center;gap:10px}
   .between{justify-content:space-between}
   .sep{height:1px;background:#EBEBEB;margin:0}
@@ -97,7 +97,7 @@
   .pin.done{background:#9A9A9A}
 
   /* onboarding */
-  .hero{margin:16px 24px 0;height:150px;border-radius:18px;background:var(--acc-l);overflow:hidden;position:relative}
+  .hero{margin:8px 24px 0;height:118px;border-radius:18px;background:var(--acc-l);overflow:hidden;position:relative}
   .langs{display:flex;gap:8px;margin-top:8px}
   .langs button{flex:1;height:36px;padding:0 6px;border-radius:18px;border:1.5px solid var(--acc);background:#fff;color:var(--acc);font-weight:600;font-size:12px;cursor:pointer;white-space:nowrap}
   .langs button:first-child{flex:1.45}
@@ -106,7 +106,7 @@
   .perm .pi{width:34px;height:34px;border-radius:10px;background:var(--acc-l);display:grid;place-items:center;color:var(--acc);flex:none}
   .perm .pi svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
   .perm b{font-size:12.5px;display:block}
-  .perm .d{font-size:10.5px;color:var(--grey);line-height:1.35;margin-top:2px}
+  .perm .d{font-size:11.5px;color:var(--grey);line-height:1.35;margin-top:2px}
   .perm .right{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 
   /* home */
@@ -117,7 +117,7 @@
   .trail:hover{transform:translateY(-1px)}
   .trail .thumb{width:72px;height:72px;border-radius:10px;background:#C4DCBE;flex:none;overflow:hidden}
   .trail b{font-size:13px;display:block}
-  .trail .m{font-size:10.5px;color:var(--grey);margin:4px 0 7px}
+  .trail .m{font-size:11.5px;color:var(--grey);margin:4px 0 7px}
   .trail .st{margin-left:auto;color:var(--acc)}
   .trail .st svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
@@ -152,13 +152,13 @@
   .recog{position:absolute;left:40px;right:40px;top:532px;background:#fff;color:var(--ink);border-radius:14px;padding:12px 16px}
   .recog b{font-size:12.5px}
   .recog .pct{position:absolute;right:16px;top:14px;color:var(--acc);font-weight:800;font-size:14px}
-  .shutterrow{position:absolute;left:0;right:0;top:640px;display:flex;align-items:center;justify-content:center;gap:66px}
+  .shutterrow{position:absolute;left:0;right:0;top:630px;display:flex;align-items:center;justify-content:center;gap:66px}
   .shutter{width:72px;height:72px;border-radius:50%;background:#fff;border:0;cursor:pointer;position:relative;transition:transform .1s}
   .shutter::after{content:"";position:absolute;inset:5px;border-radius:50%;border:2px solid var(--ink)}
   .shutter.ready{animation:glow 1.2s infinite}
   @keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.6)}50%{box-shadow:0 0 0 12px rgba(255,255,255,0)}}
   .sq{width:44px;height:44px;border-radius:8px;background:#465048;border:0;cursor:pointer;display:grid;place-items:center;color:#fff}
-  .camcap{position:absolute;left:0;right:0;top:730px;text-align:center;font-size:10.5px;color:#C8C8C8}
+  .camcap{position:absolute;left:0;right:0;top:718px;text-align:center;font-size:11.5px;color:#E2E2E2}
 
   /* result */
   .photo{margin:8px 24px 0;height:170px;border-radius:16px;overflow:hidden;position:relative;background:#3C6046}
@@ -174,15 +174,15 @@
   .media .pl svg{width:14px;height:14px;fill:#fff}
   .media .vid{width:40px;height:40px;border-radius:8px;background:#3C6046;display:grid;place-items:center;flex:none}
   .media b{font-size:12.5px;display:block}
-  .media .s{font-size:10px;color:var(--grey);margin-top:2px}
+  .media .s{font-size:11px;color:var(--grey);margin-top:2px}
 
   /* settings */
-  .sec{font-size:10.5px;font-weight:700;color:var(--grey);letter-spacing:.5px;margin:14px 24px 6px}
+  .sec{font-size:11px;font-weight:700;color:var(--grey);letter-spacing:.5px;margin:14px 24px 6px}
   .group{margin:0 24px;padding:4px 16px}
   .srow{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #EBEBEB;font-size:12.5px;cursor:pointer}
   .srow:last-child{border-bottom:0}
   .srow .t b{display:block;font-weight:600}
-  .srow .t .d{font-size:10px;color:var(--grey);margin-top:2px}
+  .srow .t .d{font-size:11px;color:var(--grey);margin-top:2px}
   .srow .r{margin-left:auto;display:flex;align-items:center;gap:8px}
   .srow .r svg{width:16px;height:16px;stroke:var(--grey);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   .srow .r .acc svg{stroke:var(--acc)}
@@ -193,7 +193,7 @@
   .jcard .th{width:56px;height:56px;border-radius:10px;background:#C4DCBE;flex:none;display:grid;place-items:center}
   .jcard b{font-size:13px;display:block}
   .badges{display:flex;gap:8px;margin:6px 24px 14px}
-  .badge{flex:1;background:#fff;border-radius:12px;box-shadow:var(--shadow);padding:10px 6px;text-align:center;font-size:10px;color:var(--grey)}
+  .badge{flex:1;background:#fff;border-radius:12px;box-shadow:var(--shadow);padding:10px 6px;text-align:center;font-size:11px;color:var(--grey)}
   .badge b{display:block;font-size:16px;color:var(--acc)}
   .empty{text-align:center;color:var(--grey);font-size:12px;padding:40px 30px;line-height:1.5}
   .modal{position:absolute;inset:0;z-index:58;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.4)}
@@ -206,13 +206,64 @@
   .modal .acts .btn.red{background:var(--red);color:#fff}
   .dlrow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #EBEBEB;font-size:12.5px}
   .dlrow:last-child{border-bottom:0}
-  .dlrow .t{flex:1}.dlrow .t b{display:block;font-weight:600}.dlrow .t .d{font-size:10px;color:var(--grey);margin-top:2px}
+  .dlrow .t{flex:1}.dlrow .t b{display:block;font-weight:600}.dlrow .t .d{font-size:11px;color:var(--grey);margin-top:2px}
   .dlrow .progress{margin-top:6px;width:200px}
   .iconbtn{border:0;background:transparent;cursor:pointer;color:var(--acc);display:grid;place-items:center;padding:4px;border-radius:50%}
   .iconbtn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   .iconbtn.grey{color:var(--grey)}
   .check{width:18px;height:18px;border-radius:50%;background:var(--acc);display:grid;place-items:center}
   .check svg{width:11px;height:11px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+  /* ===== v2 additions ===== */
+  .textlink{border:0;background:transparent;color:var(--acc);font-weight:700;font-size:13px;cursor:pointer;padding:12px;width:100%}
+  .banner{margin:10px 24px 0;padding:10px 12px;border-radius:12px;background:var(--amber-bg);color:var(--amber);font-size:11.5px;line-height:1.4;font-weight:600}
+  .sos{position:absolute;right:16px;bottom:62px;width:46px;height:46px;border-radius:50%;background:var(--red);color:#fff;font-weight:800;font-size:12px;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer}
+  .endbtn{position:absolute;right:14px;top:6px;height:32px;padding:0 12px;border-radius:16px;border:1.5px solid var(--acc);background:#fff;color:var(--acc);font-weight:700;font-size:12px;cursor:pointer}
+  .seg{display:flex;border:1.5px solid var(--acc);border-radius:10px;overflow:hidden}
+  .seg button{border:0;background:#fff;color:var(--acc);font-weight:700;padding:0 12px;height:30px;font-size:12px;cursor:pointer}
+  .seg button.on{background:var(--acc);color:#fff}
+  .recog.low{top:496px}
+  .recog.low .pct{color:var(--amber)}
+  .recog.low .progress>i{background:#E0A100}
+  .recog .acts{display:none;gap:8px;margin-top:10px}
+  .recog.low .acts{display:flex}
+  .recog .acts button{flex:1;height:34px;border-radius:10px;font-weight:700;font-size:12px;cursor:pointer;border:1.5px solid var(--acc);background:#fff;color:var(--acc)}
+  .recog .acts button.p{background:var(--acc);color:#fff}
+  .shutter.off{opacity:.35}
+  .modal .box.os{background:none;padding:0;width:auto}
+  .oscard{width:270px;background:#F7F7F7;border-radius:14px;text-align:center;overflow:hidden}
+  .oscard .tx{padding:18px 16px 14px}
+  .oscard h3{font-size:15px;margin:0 0 6px}
+  .oscard p{font-size:12px;color:#444;margin:0;line-height:1.4}
+  .oscard .bt{display:flex;border-top:1px solid #D8D8D8}
+  .oscard .bt button{flex:1;height:44px;border:0;background:transparent;color:#007AFF;font-size:15px;cursor:pointer}
+  .oscard .bt button+button{border-left:1px solid #D8D8D8;font-weight:700}
+  .hc{--grey:#333;--acc:#0F5A43;--lgrey:#8A8A8A}
+  .hc .card{box-shadow:0 0 0 1.5px #333}
+  .screen:not(.cam) .content{zoom:var(--ts,1)}
+  .sumhero{margin:6px 24px 0;padding:16px}
+  .badgerow{display:flex;gap:6px;margin:0 24px}
+  .bg{flex:1;text-align:center;font-size:11px;color:var(--ink);line-height:1.25;font-weight:600}
+  .bg .c{width:52px;height:52px;border-radius:50%;margin:0 auto 6px;display:grid;place-items:center;background:var(--acc-l);border:2px solid var(--acc);color:var(--acc)}
+  .bg .c svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .bg.lock .c{background:#F0F0F0;border-color:#BDBDBD;color:#8A8A8A}
+  .bg.lock{color:var(--grey);font-weight:500}
+  .fchips{display:flex;flex-wrap:wrap;gap:8px}
+  .fchips button{height:32px;padding:0 12px;border-radius:16px;border:1.5px solid #CFCFCF;background:#fff;font-size:12px;cursor:pointer;color:var(--ink)}
+  .fchips button.on{border-color:var(--acc);background:var(--acc-l);color:var(--acc);font-weight:700}
+  .gpsbanner{position:absolute;left:16px;right:16px;top:50px;display:none;padding:8px 12px;border-radius:12px;background:var(--amber-bg);color:var(--amber);font-size:11.5px;font-weight:700;line-height:1.35;z-index:3}
+  .gpslost .gpsbanner{display:block}
+  .sim{margin-top:8px;width:100%;border:1px dashed #B5651D;color:#7A3D0C;background:#FFF8EE;border-radius:10px;padding:8px 10px;font-size:12.5px;cursor:pointer;text-align:left}
+  /* bare mode: ?bare renders just the 390 x 844 screen (used for the report figures and the Figma kit) */
+  body.bare{background:#fff;min-height:0}
+  body.bare header.top,body.bare aside{display:none}
+  body.bare main{display:block}
+  body.bare .stagewrap{display:block;padding:0;overflow:visible}
+  body.bare .stage{width:390px;height:844px;transform:none!important;margin:0!important}
+  body.bare .phone{width:390px;height:844px;padding:0;background:none;box-shadow:none;border-radius:0}
+  body.bare .viewport{border-radius:0}
+  body.bare .notch,body.bare #walk{display:none}
+  body.bare *,body.bare *::before,body.bare *::after{transition:none!important;animation:none!important}
   @media (max-width:900px){main{grid-template-columns:1fr}aside{display:none}}
 </style>
 </head>
@@ -238,6 +289,8 @@
     <symbol id="i-next" viewBox="0 0 24 24"><path d="M6 4v16l11-8z"/><rect x="17.5" y="4" width="2.5" height="16"/></symbol>
     <symbol id="i-flash" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
     <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M5 13v7h14v-7"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19C5 10 10 5 20 4c0 10-4 15-13 15z"/><path d="M5 19l8-8"/></symbol>
   </defs>
 </svg>
 
@@ -256,6 +309,7 @@
       <button data-go="camera"><span class="n">4</span>Identify (camera)</button>
       <button data-go="result"><span class="n">5</span>Result card</button>
       <button data-go="settings"><span class="n">6</span>Offline packs &amp; privacy</button>
+      <button data-go="summary"><span class="n">7</span>Trail summary &amp; feedback</button>
       <button data-go="journal"><span class="n">+</span>Trail Journal</button>
     </div>
     <h2>Try these interactions</h2>
@@ -265,10 +319,17 @@
       <li><b>Trail Mode:</b> press <i>Walk</i> to simulate GPS movement – crossing a stop's geofence auto-plays its narration. Try the transcript, language switch and stop list.</li>
       <li><b>Identify:</b> the on-device model builds confidence live; press the shutter when it is ready.</li>
       <li><b>Result:</b> switch tabs, play narration, save to Journal.</li>
-      <li><b>Settings:</b> download/pause packs, change privacy defaults, delete all local data.</li>
+      <li><b>Settings:</b> resume/pause packs, accessibility (text size, high contrast), privacy defaults, delete all local data.</li>
+      <li><b>Trail Mode:</b> <i>End trail</i> leaves early and opens the summary; <i>SOS</i> shows your position offline.</li>
+      <li><b>Identify:</b> the camera permission is asked the first time you open it.</li>
     </ul>
     <h2>Design notes</h2>
     <p>Offline-first: everything on a trail works with zero signal. Geofencing replaces GPS polling to save battery. Camera frames are processed on the device and never uploaded. Location is requested “only while using the app”.</p>
+    <h2>Simulate edge cases</h2>
+    <button class="sim" data-sim="lowconf">Low-confidence identification</button>
+    <button class="sim" data-sim="gps">GPS signal lost (toggle)</button>
+    <button class="sim" data-sim="loc">Location denied &rarr; manual mode</button>
+    <button class="sim" data-sim="dlfail">Next pack download fails at 60%</button>
     <button class="reset" id="reset">Reset prototype</button>
   </aside>
 
@@ -301,17 +362,17 @@
                   <button data-lang="BM">Bahasa Malaysia</button><button data-lang="EN" class="on">English</button><button data-lang="ZH">中文</button>
                 </div>
               </div>
-              <div class="pad" style="margin-top:18px"><b style="font-size:13px">Permissions (asked only when needed)</b></div>
+              <div class="pad" style="margin-top:18px"><b style="font-size:13px">Permissions – asked only when needed</b></div>
               <div class="pad">
                 <div class="card perm">
                   <div class="pi"><svg><use href="#i-pin"/></svg></div>
-                  <div><b>Location — while using the app</b><div class="d">Triggers narration as you reach each stop</div></div>
-                  <div class="right"><button class="toggle on" data-perm="location"></button><span class="chip">Required</span></div>
+                  <div><b>Location – while in use</b><div class="d">Asked when you open a trail. Starts narration at each stop.</div></div>
+                  <div class="right"><button class="toggle on" data-perm="location"></button><span class="chip">Recommended</span></div>
                 </div>
                 <div class="card perm">
                   <div class="pi"><svg><use href="#i-cam"/></svg></div>
-                  <div><b>Camera</b><div class="d">Identify plants, animals and landmarks on your phone</div></div>
-                  <div class="right"><button class="toggle on" data-perm="camera"></button><span class="chip">Required</span></div>
+                  <div><b>Camera</b><div class="d">Asked the first time you tap Identify. Images stay on your phone.</div></div>
+                  <div class="right"><span class="chip blue">On first use</span></div>
                 </div>
                 <div class="card perm">
                   <div class="pi"><svg><use href="#i-mic"/></svg></div>
@@ -320,7 +381,7 @@
                 </div>
                 <p class="muted small" style="margin:12px 4px 0;line-height:1.4">Photos and location never leave your phone unless you choose to share them.</p>
               </div>
-              <div class="pad" style="margin:22px 0 28px"><button class="btn primary block" id="continue">Continue</button></div>
+              <div class="pad" style="margin:14px 0 0"><button class="btn primary block" id="continue">Continue</button><button class="textlink" id="manual">Skip – I'll choose a trail manually</button></div>
             </div>
           </section>
 
@@ -330,6 +391,7 @@
             <div class="content">
               <div class="pad row between" style="margin-top:4px"><h1 class="title">Explore</h1><span class="chip"><svg width="12" height="12" style="stroke:currentColor;fill:none;stroke-width:2"><use href="#i-wifioff"/></svg>Offline ready</span></div>
               <div class="search"><svg width="18" height="18" style="stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round"><use href="#i-search"/></svg>Search trails, parks or species</div>
+              <div class="banner" id="manualBanner" style="display:none">Location is off, so trails are listed A–Z. Turn Location on for distance sorting and automatic narration.</div>
               <div class="map" style="margin:12px 24px 0;height:210px">
                 <svg viewBox="0 0 342 210" preserveAspectRatio="none">
                   <defs><pattern id="g1" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#DEE6DC" stroke-width="1"/></pattern></defs>
@@ -340,26 +402,26 @@
                   <g class="pinmark" data-trail="0"><path d="M103 106c-9-12-11-17-11-23a11 11 0 1 1 22 0c0 6-2 11-11 23z" fill="#1F7A5C"/><circle cx="103" cy="83" r="4" fill="#fff"/></g>
                   <g data-trail="1"><path d="M212 74c-9-12-11-17-11-23a11 11 0 1 1 22 0c0 6-2 11-11 23z" fill="#1F7A5C"/><circle cx="212" cy="51" r="4" fill="#fff"/></g>
                   <g data-trail="2"><path d="M267 158c-9-12-11-17-11-23a11 11 0 1 1 22 0c0 6-2 11-11 23z" fill="#1F7A5C"/><circle cx="267" cy="135" r="4" fill="#fff"/></g>
-                  <circle cx="154" cy="152" r="14" fill="#C8DCFF"/><circle cx="154" cy="152" r="7" fill="#2979FF" stroke="#fff" stroke-width="2"/>
+                  <g id="homeDot"><circle cx="154" cy="152" r="14" fill="#C8DCFF"/><circle cx="154" cy="152" r="7" fill="#2979FF" stroke="#fff" stroke-width="2"/></g>
                 </svg>
-                <span class="chip white" style="position:absolute;left:12px;top:12px">Near you · Tawau</span>
+                <span class="chip white" id="nearChip" style="position:absolute;left:12px;top:12px">Near you · Tawau</span>
                 <div style="position:absolute;right:12px;top:12px;width:28px;background:#fff;border-radius:8px;box-shadow:var(--shadow);text-align:center;font-weight:700;line-height:28px;font-size:15px"><div>+</div><div style="border-top:1px solid #E6E6E6">−</div></div>
               </div>
-              <div class="pad row between" style="margin-top:16px"><b style="font-size:15px">Nearby trails</b><span class="small" style="color:var(--acc)">Sort: distance</span></div>
+              <div class="pad row between" style="margin-top:16px"><b style="font-size:15px">Nearby trails</b><span class="small" id="sortLbl" style="color:var(--acc)">Sort: distance</span></div>
               <div class="pad" id="trails">
                 <div class="card trail" data-trail="0">
                   <div class="thumb"><svg viewBox="0 0 72 72" width="72" height="72"><ellipse cx="36" cy="36" rx="22" ry="11" fill="#78AA6E" transform="rotate(34 36 36)"/><ellipse cx="30" cy="42" rx="16" ry="8" fill="#5F965A" transform="rotate(-40 30 42)"/></svg></div>
-                  <div><b>Tawau Hills – Canopy Trail</b><div class="m">12 stops · 1.8 km · ~45 min</div><span class="chip blue">3.2 km away</span></div>
+                  <div><b>Tawau Hills – Canopy Trail</b><div class="m">12 stops · 1.8 km · ~45 min</div><span class="chip blue dist">3.2 km away</span></div>
                   <span class="st"><span class="check"><svg><use href="#i-check"/></svg></span></span>
                 </div>
                 <div class="card trail" data-trail="1">
                   <div class="thumb"><svg viewBox="0 0 72 72" width="72" height="72"><ellipse cx="36" cy="36" rx="22" ry="11" fill="#78AA6E" transform="rotate(34 36 36)"/><ellipse cx="30" cy="42" rx="16" ry="8" fill="#5F965A" transform="rotate(-40 30 42)"/></svg></div>
-                  <div><b>Sebatik Mangrove Boardwalk</b><div class="m">8 stops · 1.1 km · ~30 min</div><span class="chip blue">6.5 km away</span></div>
+                  <div><b>Sebatik Mangrove Boardwalk</b><div class="m">8 stops · 1.1 km · ~30 min</div><div class="row" style="gap:6px"><span class="chip blue dist">6.5 km away</span><span class="chip amber" id="h1chip">Paused 60%</span></div><div class="progress" id="h1bar" style="width:150px;margin-top:7px"><i style="width:60%"></i></div></div>
                   <span class="st" style="color:var(--grey)"><svg><use href="#i-dl"/></svg></span>
                 </div>
                 <div class="card trail" data-trail="2">
                   <div class="thumb"><svg viewBox="0 0 72 72" width="72" height="72"><ellipse cx="36" cy="36" rx="22" ry="11" fill="#78AA6E" transform="rotate(34 36 36)"/><ellipse cx="30" cy="42" rx="16" ry="8" fill="#5F965A" transform="rotate(-40 30 42)"/></svg></div>
-                  <div><b>Sepilok Rainforest Discovery</b><div class="m">15 stops · 2.4 km · ~70 min</div><span class="chip blue">Download 48 MB</span></div>
+                  <div><b>Sepilok Rainforest Discovery</b><div class="m">15 stops · 2.4 km · ~70 min</div><span class="chip blue" id="h2chip">Download 56 MB</span></div>
                   <span class="st" style="color:var(--grey)"><svg><use href="#i-dl"/></svg></span>
                 </div>
                 <div style="height:20px"></div>
@@ -371,7 +433,7 @@
           <!-- ================= 3. TRAIL MODE ================= -->
           <section class="screen" id="s-trail">
             <div class="statusbar"><span>9:41</span><span class="icons" data-sb></span></div>
-            <div class="appbar"><button class="back" data-back="home"><svg width="22" height="22" style="stroke:var(--ink);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><use href="#i-chev-l"/></svg></button><span id="trailTitle">Canopy Trail</span></div>
+            <div class="appbar"><button class="back" data-back="home"><svg width="22" height="22" style="stroke:var(--ink);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><use href="#i-chev-l"/></svg></button><span id="trailTitle">Canopy Trail</span><button class="endbtn" id="endBtn">End trail</button></div>
             <div class="content">
               <div class="tm-map">
                 <svg viewBox="0 0 390 400" preserveAspectRatio="none">
@@ -386,7 +448,7 @@
                 <div class="userdot" id="userdot" style="left:183px;top:228px"></div>
                 <div style="position:absolute;left:16px;top:12px;display:flex;gap:6px"><span class="chip"><svg width="12" height="12" style="stroke:currentColor;fill:none;stroke-width:2"><use href="#i-wifioff"/></svg>Offline</span><span class="chip amber"><svg width="12" height="12" style="stroke:currentColor;fill:none;stroke-width:2"><use href="#i-batt"/></svg>Battery saver</span></div>
                 <button class="chip" id="walk" style="position:absolute;right:16px;top:12px;border:0;cursor:pointer;background:#fff;box-shadow:var(--shadow);height:28px;font-size:11px"><svg width="12" height="12" style="fill:var(--acc)"><use href="#i-play"/></svg>Walk to next stop</button>
-                <div class="nextbar"><span class="pin" id="nextpin">3</span><span id="nexttext">Next: Stop 3 · 40 m ahead</span><span style="margin-left:auto;color:var(--acc);font-size:10px">GPS ●</span></div>
+                <button class="sos" id="sos" aria-label="Emergency help">SOS</button><div class="gpsbanner">Searching for GPS… showing your last known position. Stops and narration still work.</div><div class="nextbar"><span class="pin" id="nextpin">4</span><span id="nexttext">Next: Stop 4 · 40 m ahead</span><span id="gpsLbl" style="margin-left:auto;color:var(--acc);font-size:11px">GPS ●</span></div>
               </div>
               <div class="card player">
                 <div class="row" style="align-items:flex-start">
@@ -434,17 +496,18 @@
               <div style="position:absolute;left:0;right:0;top:2px;text-align:center"><span class="chip" style="background:#fff"><svg width="12" height="12" style="stroke:currentColor;fill:none;stroke-width:2"><use href="#i-wifioff"/></svg>Works offline</span></div>
               <div class="hint" id="camHint">Point at a plant, animal or landmark</div>
               <div class="bracket b1"></div><div class="bracket b2"></div><div class="bracket b3"></div><div class="bracket b4"></div>
-              <div class="recog">
+              <div class="recog" id="recog">
                 <b id="recogLabel">Searching…</b><span class="pct" id="recogPct">0%</span>
                 <div class="small muted" style="margin-top:2px" id="recogSub">Hold steady · confidence building</div>
                 <div class="progress" style="margin-top:8px;height:6px"><i id="recogBar"></i></div>
+                <div class="acts"><button id="retry" class="p">Try again</button><button id="guide">Species guide</button></div>
               </div>
               <div class="shutterrow">
                 <button class="sq" data-toast="Flash is off – Rafflesia blooms are photographed in natural light"><svg width="18" height="18" style="fill:#fff"><use href="#i-flash"/></svg></button>
                 <button class="shutter" id="shutter" title="Capture"></button>
                 <button class="sq" data-toast="Gallery: identify from a saved photo (processed on device)"><div style="width:24px;height:24px;background:#C8D2C8;border-radius:3px"></div></button>
               </div>
-              <div class="camcap">Tap to capture and save to Journal</div>
+              <div class="camcap" id="camCap">Tap to capture and save to Journal</div>
             </div>
           </section>
 
@@ -460,20 +523,20 @@
                   <circle cx="171" cy="86" r="40" fill="#AA3C46"/><circle cx="171" cy="86" r="14" fill="#6E1E28"/>
                 </svg>
                 <span class="chip white" style="position:absolute;left:12px;top:12px;color:var(--acc)" id="matchChip">92% match</span>
-                <span class="chip white" style="position:absolute;right:12px;top:12px;color:var(--grey)">Identified offline</span>
+                <span class="chip white" style="position:absolute;right:12px;top:12px;color:var(--grey)">Identified on device</span>
               </div>
               <div class="pad" style="margin-top:14px">
                 <h1 class="title">Rafflesia keithii</h1>
-                <div class="muted" style="font-size:11.5px;margin-top:3px">Bunga Pakma · world's largest flower genus</div>
-                <div class="row" style="gap:8px;margin-top:8px"><span class="chip">Endemic to Sabah</span><span class="chip red">Protected species</span></div>
+                <div class="muted" style="font-size:11.5px;margin-top:3px">Bunga Pakma · one of the world's largest flowers</div>
+                <div class="row" style="gap:8px;margin-top:8px"><span class="chip">Native to Borneo</span><span class="chip red">Protected species</span></div>
               </div>
               <div class="tabs" id="tabs"><button class="on" data-tab="about">About</button><button data-tab="audio">Audio</button><button data-tab="video">Video</button><button data-tab="nearby">Nearby</button></div>
-              <div class="tabpane on" data-pane="about">Rafflesia keithii is a parasitic flower found only in Sabah. Blooms last around five to seven days and can reach 90 cm across. It has no leaves, stems or roots and takes its nutrients from the <i>Tetrastigma</i> vine.</div>
+              <div class="tabpane on" data-pane="about">Rafflesia keithii is a parasitic flower of Borneo's rainforests. It has no leaves, stems or roots and takes its nutrients from its <i>Tetrastigma</i> host vine. Each bloom lasts only a few days.</div>
               <div class="tabpane" data-pane="audio">Narration available in Bahasa Malaysia, English and 中文 (1:12 each). Transcript included for accessibility. Files are stored in the Tawau Hills offline pack (2.1 MB).</div>
               <div class="tabpane" data-pane="video">Bloom time-lapse (0:28, 4 MB). Streams adaptively on Wi-Fi; a low-resolution copy is bundled in the offline pack.</div>
               <div class="tabpane" data-pane="nearby">Two other known bloom sites within 400 m: Stop 7 (Rafflesia bud, due in ~3 weeks) and the Ranger station display. Reports from the park office: 2 this month.</div>
-              <div class="card media" id="narr"><div class="pl"><svg id="narrIcon"><use href="#i-play"/></svg></div><div><b>Play narration (1:12)</b><div class="s">BM · EN · 中文 · transcript available</div></div><div style="margin-left:auto;width:70px"><div class="progress"><i id="narrBar"></i></div></div></div>
-              <div class="card media" data-toast="Video streams on Wi-Fi only (see Settings › Data & battery)"><div class="vid"><svg width="14" height="14" style="fill:#fff"><use href="#i-play"/></svg></div><div><b>Bloom time-lapse (0:28)</b><div class="s">Streams on Wi-Fi · 4 MB</div></div></div>
+              <div class="card media" id="narr"><div class="pl"><svg id="narrIcon"><use href="#i-play"/></svg></div><div><b>Play narration (1:12)</b><div class="s">BM · EN · 中文 · in offline pack</div></div><div style="margin-left:auto;width:70px"><div class="progress"><i id="narrBar"></i></div></div></div>
+              <div class="card media" data-toast="Video streams on Wi-Fi only (see Settings › Data & battery)"><div class="vid"><svg width="14" height="14" style="fill:#fff"><use href="#i-play"/></svg></div><div><b>Bloom time-lapse (0:28)</b><div class="s">Low-res offline · HD on Wi-Fi</div></div></div>
               <div class="pad row" style="gap:12px;margin:14px 0 24px"><button class="btn primary" style="flex:1;height:44px;font-size:12.5px" id="saveBtn">Save to Journal</button><button class="btn outline" style="flex:1;height:44px;font-size:12.5px" data-toast="Thanks – flagged for review by a park guide">Report incorrect</button></div>
             </div>
             <nav class="bottomnav" data-nav></nav>
@@ -487,16 +550,23 @@
               <div class="sec">OFFLINE PACKS</div>
               <div class="card group" id="packs">
                 <div class="dlrow" data-pack="0"><div class="t"><b>Tawau Hills Park</b><div class="d">48 MB · maps, audio, images, model</div></div><span class="check"><svg><use href="#i-check"/></svg></span></div>
-                <div class="dlrow" data-pack="1"><div class="t"><b>Sebatik Mangrove Boardwalk</b><div class="d" data-d>22 MB · downloading 60%</div><div class="progress" data-p><i style="width:60%"></i></div></div><button class="iconbtn grey" data-act><svg><use href="#i-pause"/></svg></button></div>
-                <div class="dlrow" data-pack="2"><div class="t"><b>Kinabalu Park Botanical</b><div class="d" data-d>64 MB · includes 30 s videos</div><div class="progress" data-p style="display:none"><i style="width:0%"></i></div></div><button class="iconbtn" data-act><svg><use href="#i-dl"/></svg></button></div>
-                <div class="small muted" style="padding:10px 0 4px" id="storage">Storage used 70 MB of 2.1 GB free</div>
-                <div class="progress" style="margin-bottom:8px;background:#E8E8E8"><i id="storageBar" style="width:8%;background:#9A9A9A"></i></div>
+                <div class="dlrow" data-pack="1"><div class="t"><b>Sebatik Mangrove Boardwalk</b><div class="d" data-d>22 MB · paused at 60% – waiting for Wi-Fi</div><div class="progress" data-p><i style="width:60%"></i></div></div><button class="iconbtn" data-act><svg><use href="#i-dl"/></svg></button></div>
+                <div class="dlrow" data-pack="2"><div class="t"><b>Sepilok Rainforest Discovery</b><div class="d" data-d>56 MB · maps, audio, images, model</div><div class="progress" data-p style="display:none"><i style="width:0%"></i></div></div><button class="iconbtn" data-act><svg><use href="#i-dl"/></svg></button></div>
+                <div class="small muted" style="padding:10px 0 4px" id="storage">Storage used 61 MB · 2.1 GB free</div>
+                <div class="progress" style="margin-bottom:8px;background:#E8E8E8"><i id="storageBar" style="width:4%;background:#9A9A9A"></i></div>
               </div>
               <div class="sec">DATA &amp; BATTERY</div>
               <div class="card group">
                 <div class="srow"><div class="t"><b>Download on Wi-Fi only</b></div><div class="r"><button class="toggle on" data-set="wifi"></button></div></div>
                 <div class="srow"><div class="t"><b>Battery saver (lower GPS rate)</b></div><div class="r"><button class="toggle on" data-set="batt"></button></div></div>
                 <div class="srow"><div class="t"><b>Stream video on mobile data</b></div><div class="r"><button class="toggle" data-set="video"></button></div></div>
+              </div>
+              <div class="sec">ACCESSIBILITY</div>
+              <div class="card group">
+                <div class="srow"><div class="t"><b>Text size</b></div><div class="r"><div class="seg" id="textsize"><button class="on" data-ts="1">A</button><button data-ts="1.1">A+</button><button data-ts="1.2">A++</button></div></div></div>
+                <div class="srow"><div class="t"><b>High contrast</b><div class="d">Stronger colours for bright sunlight</div></div><div class="r"><button class="toggle" data-set="contrast"></button></div></div>
+                <div class="srow"><div class="t"><b>Always show transcripts</b></div><div class="r"><button class="toggle on" data-set="transcript"></button></div></div>
+                <div class="srow"><div class="t"><b>Vibrate when entering a stop</b></div><div class="r"><button class="toggle on" data-set="haptic"></button></div></div>
               </div>
               <div class="sec">PRIVACY</div>
               <div class="card group">
@@ -506,6 +576,36 @@
                 <button class="danger" id="deleteBtn">Delete my Journal and all local data</button>
               </div>
               <div style="height:20px"></div>
+            </div>
+            <nav class="bottomnav" data-nav></nav>
+          </section>
+
+          <!-- ================= 7. TRAIL SUMMARY & FEEDBACK ================= -->
+          <section class="screen" id="s-summary">
+            <div class="statusbar"><span>9:41</span><span class="icons" data-sb></span></div>
+            <div class="appbar"><button class="back" data-back="trail"><svg width="22" height="22" style="stroke:var(--ink);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><use href="#i-chev-l"/></svg></button>Trail summary</div>
+            <div class="content">
+              <div class="card sumhero">
+                <div class="small" id="sumKicker" style="color:var(--acc);font-weight:800;letter-spacing:.3px">CANOPY TRAIL · ENDED EARLY</div>
+                <div style="font-size:22px;font-weight:800;margin-top:4px" id="sumStops">4 of 12 stops</div>
+                <div class="progress" style="margin-top:10px"><i id="sumBar" style="width:33%"></i></div>
+                <div class="small muted" style="margin-top:8px" id="sumMeta">About 1.0 km · 36 min · saved on this phone</div>
+              </div>
+              <div class="badges" style="margin-top:12px"><div class="badge"><b id="sumA">4</b>stops visited</div><div class="badge"><b id="sumB">2</b>species identified</div><div class="badge"><b id="sumC">3</b>badges earned</div></div>
+              <div class="sec" style="margin-top:2px">BADGES</div>
+              <div class="badgerow" id="badgerow">
+                <div class="bg"><div class="c"><svg><use href="#i-pin"/></svg></div>First steps</div>
+                <div class="bg"><div class="c"><svg><use href="#i-cam"/></svg></div>Rafflesia spotter</div>
+                <div class="bg"><div class="c"><svg><use href="#i-leaf"/></svg></div>Canopy walker</div>
+                <div class="bg lock"><div class="c"><svg><use href="#i-lock"/></svg></div>Trail finisher</div>
+              </div>
+              <div class="sec">TRAIL CONDITIONS · OPTIONAL</div>
+              <div class="card group" style="padding:14px 16px">
+                <div class="fchips" id="fchips"><button>Muddy</button><button class="on">Fallen tree</button><button>Path closed</button><button>Wildlife nearby</button></div>
+                <div class="row" style="gap:8px;margin-top:12px"><button class="btn outline" id="fbNote" style="flex:1;height:38px;font-size:12px;padding:0 8px">Write note</button><button class="btn outline" id="fbVoice" style="flex:1;height:38px;font-size:12px;padding:0 8px">Voice note</button><button class="btn primary" id="fbSend" style="flex:1;height:38px;font-size:12px;padding:0 8px">Send</button></div>
+                <div class="small muted" style="margin-top:8px">Queued on your phone and sent when you have a signal.</div>
+              </div>
+              <div class="pad" style="margin:14px 0 6px"><button class="btn primary block" id="doneBtn">Done – back to Home</button><button class="textlink" data-go="journal">Open my Journal</button></div>
             </div>
             <nav class="bottomnav" data-nav></nav>
           </section>
@@ -535,13 +635,14 @@
 <script>
 (function(){
   const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+  if(/[?&]bare/.test(location.search))document.body.classList.add('bare');
   const vp=$('#viewport');
-  const screens={onboarding:1,home:2,trail:3,camera:4,result:5,settings:6,journal:7};
-  const names={onboarding:'1 – Onboarding',home:'2 – Home / Explore',trail:'3 – Trail Mode',camera:'4 – Identify (camera)',result:'5 – Result card',settings:'6 – Offline packs & privacy',journal:'+ Trail Journal'};
+  const screens={onboarding:1,home:2,trail:3,camera:4,result:5,settings:6,summary:7,journal:8};
+  const names={onboarding:'1 – Onboarding',home:'2 – Home / Explore',trail:'3 – Trail Mode',camera:'4 – Identify (camera)',result:'5 – Result card',settings:'6 – Offline packs & privacy',summary:'7 – Trail summary & feedback',journal:'+ Trail Journal'};
   let current=null;
   const state={lang:'EN',journal:[{t:'Bornean orangutan (sighting)',s:'Stop 1 · 09:12 · photo'},{t:'Tawau Hills Park – Canopy Trail',s:'Started 09:05 · 2 of 12 stops'}],saved:false,
     stops:[{n:1,t:'Trailhead & ranger station',x:39,y:312,done:true},{n:2,t:'Dipterocarp giants',x:117,y:248,done:true},{n:3,t:'Rafflesia keithii viewing site',x:203,y:220,done:false},{n:4,t:'Canopy walkway',x:242,y:140,done:false},{n:5,t:'Hornbill lookout',x:320,y:100,done:false}],
-    stopIdx:2,playing:true,pos:42,timer:null,walking:false,recogTimer:null,narrTimer:null,narrOn:false};
+    stopIdx:2,playing:true,pos:42,timer:null,walking:false,recogTimer:null,narrTimer:null,narrOn:false,camAllowed:false,lowConf:false,gpsLost:false,manual:false,dlFail:false};
 
   /* ---------- status bar icons & bottom nav ---------- */
   const sbSVG=(dark)=>{const c=dark?'#fff':'#212121';return `<svg width="16" height="12" viewBox="0 0 16 12"><rect x="0" y="8" width="3" height="4" fill="${c}"/><rect x="4.3" y="5.5" width="3" height="6.5" fill="${c}"/><rect x="8.6" y="3" width="3" height="9" fill="${c}"/><rect x="12.9" y="0" width="3" height="12" fill="${c}"/></svg>
@@ -559,12 +660,13 @@
     if(prev&&screens[prev]>screens[id]){const p=$('#s-'+prev);p.classList.add('back')}
     const el=$('#s-'+id); el.classList.add('active'); el.querySelector('.content').scrollTop=0;
     vp.classList.toggle('dark',id==='camera');
-    $$('.bottomnav button').forEach(b=>b.classList.toggle('active',b.dataset.go===(id==='trail'?'home':id)));
+    $$('.bottomnav button').forEach(b=>b.classList.toggle('active',b.dataset.go===(id==='trail'||id==='summary'?'home':id==='result'?'camera':id)));
     $$('#navlist button').forEach(b=>b.classList.toggle('active',b.dataset.go===id));
     $('#crumb').textContent=names[id];
     try{if(location.hash!=='#'+id)history.replaceState(null,'','#'+id)}catch(e){}
-    if(id==='camera')startRecognition(); else stopRecognition();
+    if(id==='camera'){stopRecognition();if(state.camAllowed)startRecognition();else askCamera(prev)}else stopRecognition();
     if(id==='journal')renderJournal();
+    if(id==='summary')renderSummary();
     if(id!=='trail'&&state.timer){clearInterval(state.timer);state.timer=null}
     if(id==='trail'&&state.playing)startPlayer();
   }
@@ -574,28 +676,32 @@
     const t=e.target.closest('[data-toast]'); if(t){toast(t.dataset.toast);return}
     const tg=e.target.closest('.toggle'); if(tg){tg.classList.toggle('on');onToggle(tg);return}
   });
-  window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(screens[h])go(h)});
+  window.addEventListener('hashchange',()=>route(location.hash.slice(1)));
 
   /* ---------- toast / sheet / modal ---------- */
   let toastT; function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200)}
   function sheet(html){$('#sheetBody').innerHTML='<div class="grab"></div>'+html;$('#sheet').classList.add('show')}
   $('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')$('#sheet').classList.remove('show')});
   function closeSheet(){$('#sheet').classList.remove('show')}
-  function modal(html){$('#modalBody').innerHTML=html;$('#modal').classList.add('show')}
+  function modal(html,cls){$('#modalBody').className='box '+(cls||'');$('#modalBody').innerHTML=html;$('#modal').classList.add('show')}
   function closeModal(){$('#modal').classList.remove('show')}
 
   /* ---------- onboarding ---------- */
   $('#langs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('#langs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');state.lang=b.dataset.lang;$('#langBtn').textContent=state.lang+' ▾';toast({BM:'Bahasa Malaysia dipilih – narasi akan dimainkan dalam BM',EN:'English selected – narration will play in English',ZH:'已选择中文 – 解说将以中文播放'}[state.lang])});
   function onToggle(tg){
-    if(tg.dataset.perm==='location'&&!tg.classList.contains('on')){toast('Without location, narration must be started manually at each stop')}
+    if(tg.dataset.perm==='location'&&!tg.classList.contains('on')){toast('Without location you choose trails manually and start narration at each stop')}
     if(tg.dataset.perm==='camera'&&!tg.classList.contains('on')){toast('Identify will be unavailable until camera access is granted')}
     if(tg.dataset.perm==='mic'){toast(tg.classList.contains('on')?'Microphone enabled – used only while you hold the record button':'Microphone stays off')}
     if(tg.dataset.set==='batt'){toast(tg.classList.contains('on')?'Battery saver on: GPS sampled every 10 s, animations off':'Battery saver off: precise GPS, full animations')}
     if(tg.dataset.set==='wifi'){toast(tg.classList.contains('on')?'Packs download on Wi-Fi only':'Packs may download on mobile data')}
     if(tg.dataset.set==='video'){toast(tg.classList.contains('on')?'Video will stream on mobile data (about 4 MB per clip)':'Video streams on Wi-Fi only')}
     if(tg.dataset.set==='stats'){toast(tg.classList.contains('on')?'Thank you – anonymous trail statistics will be shared':'No usage statistics are shared')}
+    if(tg.dataset.set==='contrast'){vp.classList.toggle('hc',tg.classList.contains('on'));toast(tg.classList.contains('on')?'High contrast on – easier to read in sunlight':'High contrast off')}
+    if(tg.dataset.set==='transcript'){toast(tg.classList.contains('on')?'Transcripts will open automatically with each narration':'Transcripts open only when you tap Transcript')}
+    if(tg.dataset.set==='haptic'){toast(tg.classList.contains('on')?'Phone vibrates when you enter a stop zone':'No vibration at stops')}
   }
-  $('#continue').addEventListener('click',()=>{go('home');toast('Nearby trails ranked by GPS distance')});
+  $('#continue').addEventListener('click',()=>{const on=$('[data-perm="location"]').classList.contains('on');go('home');if(on)toast('Nearby trails ranked by GPS distance');else{applyManual();toast('Location is off – choose a trail from the list')}});
+  $('#manual').addEventListener('click',()=>{applyManual();go('home');toast('Manual mode – you can turn Location on at any time')});
 
   /* ---------- home ---------- */
   const trailNames=['Canopy Trail','Mangrove Boardwalk','Rainforest Discovery'];
@@ -603,32 +709,34 @@
   $('#trails').addEventListener('click',e=>{const c=e.target.closest('.trail');if(!c)return;openTrail(+c.dataset.trail)});
   function openTrail(i){
     if(packReady[i]){$('#trailTitle').textContent=trailNames[i];go('trail');return}
-    const size=i===1?'22 MB':'48 MB';
-    sheet(`<h3>Download offline pack?</h3><p><b>${trailNames[i]}</b> · ${size} · maps, audio, images and the on-device model. You are on Wi-Fi, so this is free. Once downloaded, the whole trail works with no signal.</p>
-      <div class="progress" style="margin:4px 0 14px"><i id="dlbar"></i></div>
-      <div class="row" style="gap:10px"><button class="btn outline" style="flex:1;height:42px" id="dlCancel">Later</button><button class="btn primary" style="flex:1;height:42px" id="dlGo">Download</button></div>`);
+    const size=sizes[i]+' MB';
+    sheet(`<h3>${packs[i].p?'Finish downloading?':'Download offline pack?'}</h3><p><b>${trailNames[i]}</b> · ${size} · maps, audio, images and the on-device model. You are on Wi-Fi, so this is free. Once downloaded, the whole trail works with no signal.</p>
+      <div class="progress" style="margin:4px 0 14px"><i id="dlbar" style="width:${packs[i].p||0}%"></i></div>
+      <div class="row" style="gap:10px"><button class="btn outline" style="flex:1;height:42px" id="dlCancel">Later</button><button class="btn primary" style="flex:1;height:42px" id="dlGo">${packs[i].p?'Resume':'Download'}</button></div>`);
     $('#dlCancel').onclick=closeSheet;
-    $('#dlGo').onclick=()=>{let p=0;$('#dlGo').textContent='Downloading…';$('#dlGo').disabled=true;const iv=setInterval(()=>{p+=7;$('#dlbar').style.width=Math.min(p,100)+'%';if(p>=100){clearInterval(iv);packReady[i]=true;const st=$$('#trails .trail')[i].querySelector('.st');st.style.color='';st.innerHTML='<span class="check"><svg><use href="#i-check"/></svg></span>';closeSheet();$('#trailTitle').textContent=trailNames[i];go('trail');toast('Pack downloaded – trail available offline')}},90)};
+    $('#dlGo').onclick=()=>{let p=packs[i].p||0;$('#dlGo').textContent='Downloading…';$('#dlGo').disabled=true;const iv=setInterval(()=>{p+=7;$('#dlbar').style.width=Math.min(p,100)+'%';if(state.dlFail&&p>=60){clearInterval(iv);state.dlFail=false;packs[i].p=p;updateStorage();showDlError(i,p);return}if(p>=100){clearInterval(iv);completePack(i);closeSheet();$('#trailTitle').textContent=trailNames[i];go('trail');toast('Pack downloaded – trail available offline')}},90)};
   }
 
   /* ---------- trail mode ---------- */
   function renderStops(){
-    $('#stops').innerHTML=state.stops.map((s,i)=>`<g data-stop="${i}" style="cursor:pointer"><path d="M${s.x} ${s.y+2}c-8-10-11-15-11-22a11 11 0 1 1 22 0c0 7-3 12-11 22z" fill="${s.done?'#969696':'#1F7A5C'}"/><text x="${s.x}" y="${s.y-16}" text-anchor="middle" font-size="11" font-weight="700" fill="#fff" font-family="inherit">${s.n}</text></g>`).join('');
+    const zones=state.stops.map((s,i)=>(i===state.stopIdx||i===state.stopIdx+1)?`<circle cx="${s.x}" cy="${s.y}" r="${i===state.stopIdx?32:26}" fill="rgba(31,122,92,${i===state.stopIdx?.15:.07})" stroke="#1F7A5C" stroke-width="1.5" stroke-dasharray="4 4"/>`:'').join('');
+    const pins=state.stops.map((s,i)=>`<g data-stop="${i}" style="cursor:pointer"><path d="M${s.x} ${s.y+2}c-8-10-11-15-11-22a11 11 0 1 1 22 0c0 7-3 12-11 22z" fill="${s.done?'#969696':'#1F7A5C'}"/><text x="${s.x}" y="${s.y-16}" text-anchor="middle" font-size="11" font-weight="700" fill="#fff" font-family="inherit">${s.n}</text></g>`).join('');
+    $('#stops').innerHTML=zones+pins;
   }
   renderStops();
   $('#stops').addEventListener('click',e=>{const g=e.target.closest('[data-stop]');if(!g)return;const s=state.stops[+g.dataset.stop];toast(`Stop ${s.n}: ${s.t}${s.done?' (visited)':''}`)});
   function fmt(sec){return Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0')}
   function updatePlayer(){const s=state.stops[state.stopIdx];$('#npLabel').textContent=`NOW PLAYING · STOP ${s.n} OF 12`;$('#npTitle').textContent=s.t;$('#npBar').style.width=state.pos+'%';$('#npT').textContent=fmt(Math.round(90*state.pos/100));
-    const nxt=state.stops[Math.min(state.stopIdx+1,state.stops.length-1)];$('#nextpin').textContent=nxt.n;$('#nexttext').textContent=state.stopIdx>=state.stops.length-1?'Final stop reached – tap Stop list for summary':`Next: Stop ${nxt.n} · ${[180,120,40,160,90][state.stopIdx]} m ahead`;
+    const nxt=state.stops[Math.min(state.stopIdx+1,state.stops.length-1)];$('#nextpin').textContent=nxt.n;$('#nexttext').textContent=state.stopIdx>=state.stops.length-1?'Demo trail ends here – tap End trail for your summary':`Next: Stop ${nxt.n} · ${state.gpsLost?'distance unavailable':[180,120,40,160,90][state.stopIdx]+' m ahead'}`;
     $('#playIcon').innerHTML=`<use href="#${state.playing?'i-pause':'i-play'}"/>`}
   function startPlayer(){if(state.timer)clearInterval(state.timer);state.timer=setInterval(()=>{if(!state.playing)return;state.pos+=0.6;if(state.pos>=100){state.pos=100;state.playing=false}updatePlayer()},300)}
   $('#playBtn').addEventListener('click',()=>{state.playing=!state.playing;if(state.playing&&state.pos>=100)state.pos=0;updatePlayer();toast(state.playing?'Narration playing':'Narration paused')});
   $('#prevBtn').addEventListener('click',()=>{state.pos=0;updatePlayer();toast('Restarted narration')});
   $('#nextBtn').addEventListener('click',()=>{state.pos=100;state.playing=false;updatePlayer();toast('Skipped to end – next narration will auto-play at the next stop')});
   $('#langBtn').addEventListener('click',()=>{const order=['EN','BM','ZH'];state.lang=order[(order.indexOf(state.lang)+1)%3];$('#langBtn').textContent=state.lang+' ▾';$$('#langs button').forEach(x=>x.classList.toggle('on',x.dataset.lang===state.lang));toast('Narration language: '+{EN:'English',BM:'Bahasa Malaysia',ZH:'中文 (Mandarin)'}[state.lang])});
-  $('#transcriptBtn').addEventListener('click',()=>sheet(`<h3>Transcript · Stop ${state.stops[state.stopIdx].n}</h3><p>${state.stopIdx===2?'“You are standing beside one of the few places on Earth where <i>Rafflesia keithii</i> blooms. Look for the cabbage-sized bud at the base of the vine to your left. The flower has no leaves, stems or roots — it lives entirely inside its host, the <i>Tetrastigma</i> vine, and opens for only five to seven days…”':'“'+state.stops[state.stopIdx].t+' — narration transcript (demo). The full script is bundled in the offline pack for every stop in BM, EN and 中文.”'}</p><p class="muted small">Large-text and high-contrast modes available in Settings › Accessibility.</p>`));
-  $('#stopListBtn').addEventListener('click',()=>{sheet('<h3>Stops on this trail</h3>'+state.stops.map((s,i)=>`<div class="list-item" data-jump="${i}"><span class="pin ${s.done?'done':''}">${s.n}</span><div><b style="font-size:13px">${s.t}</b><div class="small muted">${s.done?'Visited · narration available':i===state.stopIdx?'You are here':'Ahead'}</div></div><span style="margin-left:auto" class="small muted">${i===state.stopIdx?'●':''}</span></div>`).join('')+'<div class="list-item" style="color:var(--grey)">… 7 more stops</div>');
-    $$('#sheetBody [data-jump]').forEach(el=>el.onclick=()=>{const i=+el.dataset.jump;closeSheet();if(state.stops[i].done||i===state.stopIdx){state.stopIdx=i;state.pos=0;state.playing=true;updatePlayer();moveDot(i);toast('Replaying narration for Stop '+state.stops[i].n)}else toast('Narration for Stop '+state.stops[i].n+' unlocks when you reach it')})});
+  $('#transcriptBtn').addEventListener('click',()=>sheet(`<h3>Transcript · Stop ${state.stops[state.stopIdx].n}</h3><p>${state.stopIdx===2?'“You are standing beside a <i>Rafflesia keithii</i> viewing site. Look for the cabbage-sized bud at the base of the vine to your left. The flower has no leaves, stems or roots — it lives entirely inside its host, the <i>Tetrastigma</i> vine, and each bloom lasts only a few days…”':'“'+state.stops[state.stopIdx].t+' — narration transcript (demo). The full script is bundled in the offline pack for every stop in BM, EN and 中文.”'}</p><p class="muted small">Large-text and high-contrast modes available in Settings › Accessibility.</p>`));
+  $('#stopListBtn').addEventListener('click',()=>{sheet('<h3>Stops on this trail</h3>'+state.stops.map((s,i)=>`<div class="list-item" data-jump="${i}"><span class="pin ${s.done?'done':''}">${s.n}</span><div><b style="font-size:13px">${s.t}</b><div class="small muted">${s.done?'Visited · narration available':i===state.stopIdx?'You are here':'Ahead'}</div></div><span style="margin-left:auto" class="small muted">${i===state.stopIdx?'●':''}</span></div>`).join('')+'<div class="list-item" style="color:var(--grey)">… 7 more stops</div>'+'<button class="btn outline block" style="margin-top:10px;height:42px" id="endFromList">End trail &amp; view summary</button>');
+    $$('#sheetBody [data-jump]').forEach(el=>el.onclick=()=>{const i=+el.dataset.jump;closeSheet();if(state.stops[i].done||i===state.stopIdx){state.stopIdx=i;state.pos=0;state.playing=true;updatePlayer();renderStops();moveDot(i);toast('Replaying narration for Stop '+state.stops[i].n)}else toast('Narration for Stop '+state.stops[i].n+' unlocks when you reach it')})});
   function moveDot(i){const s=state.stops[i];const d=$('#userdot');d.style.left=(s.x-20)+'px';d.style.top=(s.y+8)+'px'}
   $('#walk').addEventListener('click',()=>{if(state.walking)return;if(state.stopIdx>=state.stops.length-1){toast('You have reached the final stop of this demo');return}
     state.walking=true;const i=state.stopIdx+1;const s=state.stops[i];const d=$('#userdot');d.style.left=(s.x+2)+'px';d.style.top=(s.y+2)+'px';$('#walk').textContent='Walking…';
@@ -636,11 +744,17 @@
   updatePlayer();
 
   /* ---------- camera ---------- */
-  function startRecognition(){stopRecognition();let p=0;$('#shutter').classList.remove('ready');$('#recogLabel').textContent='Searching…';$('#recogSub').textContent='Hold steady · confidence building';$('#camHint').textContent='Point at a plant, animal or landmark';
-    state.recogTimer=setInterval(()=>{p+=3;if(p>92){p=92;clearInterval(state.recogTimer);state.recogTimer=null;$('#shutter').classList.add('ready');$('#recogSub').textContent='Ready – tap the shutter to capture';$('#camHint').textContent='Identified on device · no photo uploaded'}
-      $('#recogPct').textContent=p+'%';$('#recogBar').style.width=p+'%';$('#recogLabel').textContent=p<30?'Searching…':p<60?'Recognising… flowering plant':'Recognising…  Rafflesia keithii'},70)}
+  function paintRecog(p){$('#recogPct').textContent=p+'%';$('#recogBar').style.width=p+'%';$('#recogLabel').textContent=p<30?'Searching…':p<60?'Recognising… flowering plant':'Recognising…  Rafflesia keithii'}
+  function finishRecog(p,low){
+    $('#recog').classList.toggle('low',low);$('#recogPct').textContent=p+'%';$('#recogBar').style.width=p+'%';
+    if(low){$('#recogLabel').textContent='Not sure yet';$('#recogSub').textContent='Try more light, move closer, or hold still';$('#camHint').textContent='Low confidence – nothing is identified or saved';$('#camCap').textContent='The shutter unlocks at 70% confidence';$('#shutter').classList.add('off')}
+    else{$('#shutter').classList.add('ready');$('#recogSub').textContent='Ready – tap the shutter to capture';$('#camHint').textContent='Identified on device · no photo uploaded'}
+  }
+  function startRecognition(){stopRecognition();let p=0;const low=state.lowConf,cap=low?41:92;
+    $('#recog').classList.remove('low');$('#shutter').classList.remove('ready','off');$('#recogLabel').textContent='Searching…';$('#recogSub').textContent='Hold steady · confidence building';$('#camHint').textContent='Point at a plant, animal or landmark';$('#camCap').textContent='Tap to capture and save to Journal';
+    state.recogTimer=setInterval(()=>{p+=3;if(p>=cap){p=cap;clearInterval(state.recogTimer);state.recogTimer=null;finishRecog(p,low);return}paintRecog(p)},70)}
   function stopRecognition(){if(state.recogTimer){clearInterval(state.recogTimer);state.recogTimer=null}}
-  $('#shutter').addEventListener('click',()=>{if(state.recogTimer){toast('Hold steady – still recognising');return}$('#shutter').style.transform='scale(.9)';setTimeout(()=>$('#shutter').style.transform='',120);setTimeout(()=>go('result'),180)});
+  $('#shutter').addEventListener('click',()=>{if(state.recogTimer){toast('Hold steady – still recognising');return}if($('#shutter').classList.contains('off')){toast('Confidence is below 70% – try again with more light');return}$('#shutter').style.transform='scale(.9)';setTimeout(()=>$('#shutter').style.transform='',120);setTimeout(()=>go('result'),180)});
 
   /* ---------- result ---------- */
   $('#tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('#tabs button').forEach(x=>x.classList.toggle('on',x===b));$$('.tabpane').forEach(p=>p.classList.toggle('on',p.dataset.pane===b.dataset.tab))});
@@ -653,19 +767,91 @@
     const sp=state.journal.filter(j=>j.sp||/orangutan/i.test(j.t)).length;$('#jSpecies').textContent=sp;$('#jStops').textContent=state.stops.filter(s=>s.done).length;$('#jBadges').textContent=sp>=2?2:1}
 
   /* ---------- settings ---------- */
-  const packs=[{state:'done'},{state:'paused',p:60},{state:'idle',p:0}];let packTimers=[null,null,null];
+  const sizes=[48,22,56];const packs=[{state:'done',p:100},{state:'paused',p:60},{state:'idle',p:0}];let packTimers=[null,null,null];
   $('#packs').addEventListener('click',e=>{const row=e.target.closest('[data-pack]');const act=e.target.closest('[data-act]');if(!row||!act)return;const i=+row.dataset.pack;const pk=packs[i];const bar=row.querySelector('[data-p]');const d=row.querySelector('[data-d]');
     if(pk.state==='downloading'){pk.state='paused';clearInterval(packTimers[i]);act.innerHTML='<svg><use href="#i-dl"/></svg>';act.classList.remove('grey');d.textContent=d.textContent.replace('downloading','paused at');toast('Download paused');return}
-    pk.state='downloading';bar.style.display='';act.innerHTML='<svg><use href="#i-pause"/></svg>';act.classList.add('grey');const base=i===1?'22 MB':'64 MB';
-    packTimers[i]=setInterval(()=>{pk.p=Math.min(100,pk.p+2);bar.firstElementChild.style.width=pk.p+'%';d.textContent=`${base} · downloading ${pk.p}%`;if(pk.p>=100){clearInterval(packTimers[i]);pk.state='done';bar.style.display='none';d.textContent=`${base} · ready offline`;act.outerHTML='<span class="check"><svg><use href="#i-check"/></svg></span>';if(i===1)packReady[1]=true;const used=70+(i===1?22:64);$('#storage').textContent=`Storage used ${used} MB of 2.1 GB free`;$('#storageBar').style.width=(used/2100*100+5)+'%';toast('Pack ready – trail works offline')}},60);toast('Downloading on Wi-Fi…')});
+    pk.state='downloading';bar.style.display='';act.innerHTML='<svg><use href="#i-pause"/></svg>';act.classList.add('grey');const base=sizes[i]+' MB';
+    packTimers[i]=setInterval(()=>{pk.p=Math.min(100,pk.p+2);bar.firstElementChild.style.width=pk.p+'%';d.textContent=`${base} · downloading ${pk.p}%`;updateStorage();homeProgress(i,pk.p);if(pk.p>=100){clearInterval(packTimers[i]);completePack(i);toast('Pack ready – trail works offline')}},60);toast('Downloading on Wi-Fi…')});
   $('#deleteBtn').addEventListener('click',()=>{modal(`<h3>Delete all local data?</h3><p>This removes your Journal, photos, voice notes and visited-stop history from this phone. Offline packs are kept. Nothing was ever stored on a server, so this is the only copy.</p><div class="acts"><button class="btn outline" id="mCancel">Cancel</button><button class="btn red" id="mOk">Delete</button></div>`);$('#mCancel').onclick=closeModal;$('#mOk').onclick=()=>{state.journal=[];state.saved=false;$('#saveBtn').textContent='Save to Journal';state.stops.forEach(s=>s.done=false);renderStops();closeModal();toast('All local data deleted')}});
 
+  /* ---------- v2: edge cases, summary, SOS, accessibility ---------- */
+  function freezeRecog(p,low){stopRecognition();paintRecog(p);if(low)finishRecog(p,true);else if(p>=92)finishRecog(p,false)}
+  function askCamera(prev){
+    modal(`<div class="oscard"><div class="tx"><h3>“SabahTrail” Would Like to Access the Camera</h3><p>SabahTrail uses the camera to identify plants, animals and landmarks. Images are processed on your phone and are not uploaded.</p></div><div class="bt"><button id="camNo">Don't Allow</button><button id="camYes">Allow</button></div></div>`,'os');
+    $('#camNo').onclick=()=>{closeModal();toast('Identify needs the camera – you can still browse the species guide');go(prev&&prev!=='camera'?prev:'home')};
+    $('#camYes').onclick=()=>{closeModal();state.camAllowed=true;startRecognition()};
+  }
+  $('#retry').addEventListener('click',()=>{state.lowConf=false;startRecognition();toast('Trying again…')});
+  $('#guide').addEventListener('click',()=>toast('Opens the offline species guide, so you can browse without the camera'));
+  function setGpsLost(on){state.gpsLost=on;$('.tm-map').classList.toggle('gpslost',on);$('#gpsLbl').textContent=on?'GPS ○ searching':'GPS ●';$('#gpsLbl').style.color=on?'var(--amber)':'var(--acc)';$('#userdot').style.opacity=on?.45:1;updatePlayer()}
+  function applyManual(){
+    state.manual=true;$('#manualBanner').style.display='';$('#sortLbl').textContent='Sort: A–Z';$$('#trails .dist').forEach(e=>e.style.display='none');$('#homeDot').style.display='none';$('#nearChip').textContent='Location off';
+    const box=$('#trails');$$('#trails .trail').sort((a,b)=>a.querySelector('b').textContent.localeCompare(b.querySelector('b').textContent)).forEach(c=>box.insertBefore(c,box.lastElementChild));
+  }
+  function confirmEnd(){
+    const n=state.stopIdx+1;
+    sheet(`<h3>End this trail?</h3><p>You have reached ${n} of 12 stops. Your progress and Journal stay on this phone, and you can start this trail again any time.</p><div class="row" style="gap:10px"><button class="btn outline" style="flex:1;height:42px" id="endKeep">Keep walking</button><button class="btn primary" style="flex:1;height:42px" id="endGo">End &amp; see summary</button></div>`);
+    $('#endKeep').onclick=closeSheet;$('#endGo').onclick=()=>{closeSheet();go('summary')};
+  }
+  $('#endBtn').addEventListener('click',confirmEnd);
+  $('#sos').addEventListener('click',()=>{const s=state.stops[state.stopIdx];
+    sheet(`<h3>Emergency help</h3><p>${state.gpsLost?'GPS is searching, so this is your last known position.':'Your GPS position works without mobile data.'} Calling needs a mobile signal.</p><div class="card" style="margin-bottom:12px;font-size:12.5px;line-height:1.6"><b>Your position (demo values)</b><br>4.3871° N, 117.8847° E<br>Nearest stop: Stop ${s.n} – ${s.t}<br>Trail: ${$('#trailTitle').textContent}</div><div class="row" style="gap:10px"><button class="btn outline" style="flex:1;height:44px" id="sosClose">Close</button><button class="btn" style="flex:1;height:44px;background:var(--red);color:#fff" id="sosCall">Call 999</button></div>`)});
+  $('#sheetBody').addEventListener('click',e=>{const id=e.target.id;
+    if(id==='endFromList'){closeSheet();confirmEnd()}
+    if(id==='sosClose')closeSheet();
+    if(id==='sosCall')toast('Demo only – a real build would open the phone dialler for 999');
+  });
+  function renderSummary(){
+    const n=state.stopIdx+1,total=12,done=n>=total;
+    $('#sumKicker').textContent=`${$('#trailTitle').textContent.toUpperCase()} · ${done?'COMPLETED':'ENDED EARLY'}`;
+    $('#sumStops').textContent=`${n} of ${total} stops`;$('#sumBar').style.width=Math.round(n/total*100)+'%';
+    $('#sumMeta').textContent=`About ${(n*0.25).toFixed(1)} km · ${n*9} min · saved on this phone`;
+    const sp=state.journal.filter(j=>j.sp||/orangutan/i.test(j.t)).length;
+    const earned=[n>=1,state.saved,state.stopIdx>=3,done];
+    $$('#badgerow .bg').forEach((b,i)=>b.classList.toggle('lock',!earned[i]));
+    $('#sumA').textContent=n;$('#sumB').textContent=sp;$('#sumC').textContent=earned.filter(Boolean).length;
+  }
+  $('#doneBtn').addEventListener('click',()=>{go('home');toast('Trail saved to your Journal')});
+  $('#fchips').addEventListener('click',e=>{const b=e.target.closest('button');if(b)b.classList.toggle('on')});
+  $('#fbNote').addEventListener('click',()=>toast('Note saved – it is sent when you next have a signal'));
+  $('#fbVoice').addEventListener('click',()=>toast($('[data-perm="mic"]').classList.contains('on')?'Recording… voice notes are optional and sent only if you tap Send':'Microphone is off – turn it on in onboarding or system settings to record'));
+  $('#fbSend').addEventListener('click',()=>toast('Report queued – it will be sent when you have a signal'));
+  $('#textsize').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('#textsize button').forEach(x=>x.classList.toggle('on',x===b));vp.style.setProperty('--ts',b.dataset.ts);toast('Text size: '+b.textContent)});
+  function updateStorage(){const used=Math.round(packs.reduce((a,p,i)=>a+sizes[i]*(p.p||0)/100,0));$('#storage').textContent=`Storage used ${used} MB · 2.1 GB free`;$('#storageBar').style.width=Math.max(3,used/2100*100)+'%'}
+  function homeProgress(i,p){const c=$('#h'+i+'chip');if(c){c.textContent='Downloading '+p+'%';c.className='chip amber'}const b=$('#h'+i+'bar');if(b)b.firstElementChild.style.width=p+'%'}
+  function completePack(i){
+    packReady[i]=true;packs[i].state='done';packs[i].p=100;
+    const card=$('#trails .trail[data-trail="'+i+'"]');
+    if(card){const st=card.querySelector('.st');st.style.color='';st.innerHTML='<span class="check"><svg><use href="#i-check"/></svg></span>';const ch=card.querySelector('#h'+i+'chip');if(ch){ch.className='chip';ch.textContent='Ready offline'}const bar=card.querySelector('.progress');if(bar)bar.style.display='none'}
+    const row=$('#packs [data-pack="'+i+'"]');
+    if(row){row.querySelector('[data-d]').textContent=sizes[i]+' MB · ready offline';const pb=row.querySelector('[data-p]');if(pb)pb.style.display='none';const a=row.querySelector('[data-act]');if(a)a.outerHTML='<span class="check"><svg><use href="#i-check"/></svg></span>'}
+    updateStorage();
+  }
+  function showDlError(i,p){
+    sheet(`<h3>Download interrupted</h3><p>The connection dropped at ${p}%. Your progress is kept. Check your Wi-Fi and try again, or keep using the packs you already have.</p><div class="row" style="gap:10px"><button class="btn outline" style="flex:1;height:42px" id="dlLater">Later</button><button class="btn primary" style="flex:1;height:42px" id="dlRetry">Retry</button></div>`);
+    $('#dlLater').onclick=closeSheet;$('#dlRetry').onclick=()=>{closeSheet();openTrail(i)};
+  }
+  $$('[data-sim]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.sim;
+    if(k==='lowconf'){state.lowConf=true;if(current==='camera')startRecognition();else go('camera')}
+    if(k==='gps'){setGpsLost(!state.gpsLost);if(current!=='trail')go('trail')}
+    if(k==='loc'){applyManual();go('home')}
+    if(k==='dlfail'){state.dlFail=true;toast('The next download started from Home will drop at 60%')}
+  }));
+  function route(h){
+    let id=h;
+    if(h==='camera-low'){state.lowConf=true;id='camera'}else if(h==='trail-gps'){state.gpsLost=true;id='trail'}else if(h==='home-manual'){applyManual();id='home'}
+    if(screens[id]){go(id);if(h==='trail-gps')setGpsLost(true)}
+  }
+  window.__app={go,state,freezeRecog,setGpsLost,applyManual,updatePlayer,renderStops,renderSummary,renderJournal,sheet,closeSheet,toast};
+  updateStorage();
+
   /* ---------- scale to fit & misc ---------- */
-  function fit(){const wrap=$('.stagewrap');const s=Math.min(1,(wrap.clientHeight-20)/868,(wrap.clientWidth-20)/414);$('#stage').style.transform=`scale(${s})`;$('#stage').style.marginTop=`${-(868-868*s)/2}px`;$('#stage').style.marginBottom=`${-(868-868*s)/2}px`}
+  function fit(){if(document.body.classList.contains('bare'))return;const wrap=$('.stagewrap');const s=Math.min(1,(wrap.clientHeight-20)/868,(wrap.clientWidth-20)/414);$('#stage').style.transform=`scale(${s})`;$('#stage').style.marginTop=`${-(868-868*s)/2}px`;$('#stage').style.marginBottom=`${-(868-868*s)/2}px`}
   window.addEventListener('resize',fit);fit();
   $('#reset').addEventListener('click',()=>{try{location.reload()}catch(e){toast('Reload the page to reset the prototype')}});
-  const h=location.hash.slice(1); go(screens[h]?h:'onboarding');
+  route(location.hash.slice(1)||'onboarding');
 })();
 </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
